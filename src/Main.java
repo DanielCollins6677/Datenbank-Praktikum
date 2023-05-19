@@ -29,6 +29,54 @@ public class Main {
     //Globale Listen aller Filialen
     public static List<Filiale> filialen = new ArrayList<>();
 
+    public static void main(String[] args) throws ParserConfigurationException, IOException, SAXException {
+
+        String basePath = new File("").getAbsolutePath();
+
+        String dataPath = basePath + "\\src\\dbpraktikum-mediastore-master\\data";
+
+        String categoriesPath = dataPath + "\\categories.xml";
+        String shopAndItemsPath = dataPath + "\\dresden.xml";
+        String leipzigTransformed = dataPath + "\\leipzig_transformed.xml";
+        String reviews = dataPath + "\\reviews.csv";
+
+
+        //lese die Kategorien aus
+        List<String> categoriesString = readFile(new File(categoriesPath));
+        List<Category> categories = getCategories(categoriesString);
+
+
+        //Lese die Filialen aus
+        try {
+            Filiale f1 = readFilialeXML(shopAndItemsPath);
+            Filiale f2 = readFilialeXML(leipzigTransformed);
+
+
+            /*System.out.printf("name: %s, straße: %s, plz: %s\n",f1.getName(),f1.getStraße(),f1.getPlz());
+            for (Produkt i: f1.getProduktPreis().keySet()){
+                System.out.println(f1.getProduktPreis().get(i));
+            }*/
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        //Lese die Reviews aus
+        List<String> reviewsString = readFile(new File(reviews));
+        List<Review> reviewList = readReviews(reviewsString);
+        /*for (Review review : reviewList) {
+            System.out.println(review);
+        }*/
+
+        for(String key : abgelehnt.keySet()){
+            System.out.println(key + " wurde abgelehnt wegen:");
+            System.out.println(abgelehnt.get(key) + "\n");
+        }
+
+        //System.out.println(abgelehnt);
+    }
+
     public static List<String> readFile(File file) {
         List<String> res = new ArrayList<>();
         try (
@@ -129,52 +177,6 @@ public class Main {
             }
         }
         return res;
-    }
-
-    public static void main(String[] args) throws ParserConfigurationException, IOException, SAXException {
-
-        String basePath = new File("").getAbsolutePath();
-
-        String dataPath = basePath + "\\src\\dbpraktikum-mediastore-master\\data";
-
-        String categoriesPath = dataPath + "\\categories.xml";
-        String shopAndItemsPath = dataPath + "\\dresden.xml";
-        String leipzigTransformed = dataPath + "\\leipzig_transformed.xml";
-        String reviews = dataPath + "\\reviews.csv";
-
-
-        //lese die Kategorien aus
-        List<String> categoriesString = readFile(new File(categoriesPath));
-        List<Category> categories = getCategories(categoriesString);
-
-
-        //Lese die Filialen aus
-        try {
-            Filiale f1 = readFilialeXML(shopAndItemsPath);
-            Filiale f2 = readFilialeXML(leipzigTransformed);
-
-
-            /*System.out.printf("name: %s, straße: %s, plz: %s\n",f1.getName(),f1.getStraße(),f1.getPlz());
-            for (Produkt i: f1.getProduktPreis().keySet()){
-                System.out.println(f1.getProduktPreis().get(i));
-            }*/
-            /*
-            System.out.printf("name: %s, straße: %s, plz: %s\n",f2.getName(),f2.getStraße(),f2.getPlz());
-            for (Produkt i: f2.getProduktPreis().keySet()){
-                System.out.println(f2.getProduktPreis().get(i));
-            }*/
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        //Lese die Reviews aus
-        List<String> reviewsString = readFile(new File(reviews));
-        List<Review> reviewList = readReviews(reviewsString);
-        /*for (Review review : reviewList) {
-            System.out.println(review);
-        }*/
-        //System.out.println(abgelehnt);
     }
 
     private static Filiale readFilialeXML(String filePath) throws ParserConfigurationException, IOException, SAXException {
@@ -315,56 +317,59 @@ public class Main {
 
 
         //Überprüfe ids wiederverwendet werden
-        List<String> ids = new ArrayList<>();
+        List<String> wiederverwendeteIds = new ArrayList<>();
 
         for(Produkt produkt : bücher){
-            if(!ids.contains(produkt.getProdNr())){
-                ids.add(produkt.getProdNr());
+            if(!wiederverwendeteIds.contains(produkt.getProdNr())){
+                wiederverwendeteIds.add(produkt.getProdNr());
             } else {
                 ablehnen(produkt.getProdNr(),"Produkt verwendet vergebene ID");
             }
         }
         for(Produkt produkt : cds){
-            if(!ids.contains(produkt.getProdNr())){
-                ids.add(produkt.getProdNr());
+            if(!wiederverwendeteIds.contains(produkt.getProdNr())){
+                wiederverwendeteIds.add(produkt.getProdNr());
             }else {
                 ablehnen(produkt.getProdNr(),"Produkt verwendet vergebene ID");
             }
         }
         for(Produkt produkt : dvds){
-            if(!ids.contains(produkt.getProdNr())){
-                ids.add(produkt.getProdNr());
+            if(!wiederverwendeteIds.contains(produkt.getProdNr())){
+                wiederverwendeteIds.add(produkt.getProdNr());
             }else {
                 ablehnen(produkt.getProdNr(),"Produkt verwendet vergebene ID");
             }
         }
 
+        //letzter Check der Integrität von den Produkten
+        checkFalscheProdukte(laden);
 
         //Überprüfe, ob abgelehnte Produkte im Ergebnis sind
-        List<Produkt> doppelteID = new ArrayList<>();
+        List<Produkt> abgelehnteIds = new ArrayList<>();
+
         for(Produkt produkt : bücher){
             if(abgelehnt.containsKey(produkt.getProdNr())){
-                doppelteID.add(produkt);
+                abgelehnteIds.add(produkt);
             }
         }
         for(Produkt produkt : cds){
             if(abgelehnt.containsKey(produkt.getProdNr())){
-                doppelteID.add(produkt);
+                abgelehnteIds.add(produkt);
             }
         }
         for(Produkt produkt : dvds){
             if(abgelehnt.containsKey(produkt.getProdNr())){
-                doppelteID.add(produkt);
+                abgelehnteIds.add(produkt);
             }
         }
 
-        bücher.removeAll(doppelteID);
-        cds.removeAll(doppelteID);
-        dvds.removeAll(doppelteID);
+        bücher.removeAll(abgelehnteIds);
+        cds.removeAll(abgelehnteIds);
+        dvds.removeAll(abgelehnteIds);
 
 
 
-        //Entferne flasche Produkte aus der produktPreis relation
+        //Entferne falsche Produkte aus der produktPreis relation
 
         int produktAnz = produkte.size();
 
@@ -410,20 +415,39 @@ public class Main {
         long salesRank = 0;
         //try to read salesRank, if it cant be read into an int we set it to -1
         try {
-            salesRank = Long.parseLong(item.getAttribute("salesrank"));
+            if(!item.getAttribute("salesrank").equals("")) {
+                salesRank = Long.parseLong(item.getAttribute("salesrank"));
+            }
         }catch (Exception e){
             salesRank = -1;
         }
+
+
         NodeList itemDetails = item.getChildNodes();
 
         String classification = item.getAttribute("pgroup");
 
         if(classification.equals("Book") ){
-            return getBuchXML(itemDetails,laden,id,salesRank);
+            Buch buch = getBuchXML(itemDetails,laden,id,salesRank);
+            if(item.hasAttribute("picture")){
+                buch.setBild(item.getAttribute("picture"));
+            }
+            return buch;
+
         } else if(classification.equals("DVD")){
-            return getDVDXML(itemDetails,laden,id,salesRank);
+            DVD dvd = getDVDXML(itemDetails,laden,id,salesRank);
+            if(item.hasAttribute("picture")){
+                dvd.setBild(item.getAttribute("picture"));
+            }
+            return dvd;
+
         }else if(classification.equals("Music")){
-            return getCDXML(itemDetails,laden,id,salesRank);
+            CD cd = getCDXML(itemDetails,laden,id,salesRank);
+            if(item.hasAttribute("picture")){
+                cd.setBild(item.getAttribute("picture"));
+            }
+            return cd;
+
         } else {
             //System.out.println(classification + " abgelehnt");
             ablehnen(id,"Falsche Produktgruppen Klassifizierung, \'" + classification + "\' ist keine gültige Produktgruppe");
@@ -470,7 +494,12 @@ public class Main {
                             Node authorNode = authorSubNodes.item(j);
                             if (authorNode != null && authorNode.getNodeType() == Node.ELEMENT_NODE) {
                                 Element authorElement = (Element) authorNode;
-                                authors.add(authorElement.getTextContent());
+                                String author = authorElement.getTextContent();
+                                if(!author.equals("")){
+                                    authors.add(author);
+                                } else {
+                                    ablehnen(id,"Autoren Name ist Leer");
+                                }
                             }
                         }
 
@@ -525,9 +554,25 @@ public class Main {
                     case "isbn":
 
                         try {
-                            result.setIsbn(Long.parseLong(bookspecElement.getAttribute("val")));
+                            long isbn = Long.parseLong(bookspecElement.getAttribute("val"));
+                            result.setIsbn(String.valueOf(isbn));
                         } catch (Exception e) {
-                            result.setIsbn(-1);
+                            String errorISBN = bookspecElement.getAttribute("val");
+                            //Manche ISBN enden mit X in diesem Fall ist es trotzdem eine gültige ISBN
+                            if(errorISBN.endsWith("X")){
+
+                                //Wir entfernen das X und versuchen es erneut in ein long umzuwandeln, fall erfolgreich ist es eine gültige ISBN
+                                try{
+                                    StringBuilder sb = new StringBuilder(errorISBN);
+                                    sb.delete(sb.length() - 1, sb.length());
+                                    Long.valueOf(sb.toString());
+                                    result.setIsbn(errorISBN);
+                                } catch (Exception keineZahl){
+                                    result.setIsbn("-1");
+                                }
+                            } else {
+                                result.setIsbn("-1");
+                            }
                         }
                         break;
 
@@ -620,15 +665,16 @@ public class Main {
     }
 
     private static void readLabelsXML(NodeList labelsSubNodes, CD result) {
+        List<String> labels = new ArrayList<>();
         for (int i = 0; i < labelsSubNodes.getLength(); i++) {
             Node detail = labelsSubNodes.item(i);
             if (detail != null && detail.getNodeType() == Node.ELEMENT_NODE) {
                 Element detailElement = (Element) detail;
-                if(result.getLabel() == null) {
-                    result.setLabel(detailElement.getTextContent());
-                }
+
+                labels.add(detailElement.getTextContent());
             }
         }
+        result.setLabels(labels);
     }
 
     private static void readMusicspecs(NodeList musicspecsSubnode, CD result) {
@@ -861,12 +907,124 @@ public class Main {
     }
 
     private static void readSimilarsXML(NodeList similarsSubNodes, String id) {
-        for (int j = 0; j < similarsSubNodes.getLength(); j++) {
-            Node similarsNode = similarsSubNodes.item(j);
+        for (int i = 0; i < similarsSubNodes.getLength(); i++) {
+            Node similarsNode = similarsSubNodes.item(i);
             if (similarsNode != null && similarsNode.getNodeType() == Node.ELEMENT_NODE) {
                 Element similarsElement = (Element) similarsNode;
-                similars.put(id,similarsElement.getAttribute("asin"));
+
+                //in Leipzig-Transformed werden die ähnlichen Produkte anders angegeben
+                if(similarsElement.getTagName().equals("sim_product")){
+
+                    NodeList sim_productSubNodes = similarsElement.getChildNodes();
+                    for (int j = 0; j < sim_productSubNodes.getLength(); j++) {
+
+                        Node sim_productNode = sim_productSubNodes.item(i);
+                        if (sim_productNode != null && sim_productNode.getNodeType() == Node.ELEMENT_NODE) {
+
+                            Element sim_productElement = (Element) sim_productNode;
+
+                            if(sim_productElement.getTagName().equals("asin")){
+                                similars.put(id,sim_productElement.getTextContent());
+                            }
+                        }
+                    }
+                } else {
+                    similars.put(id,similarsElement.getAttribute("asin"));
+                }
             }
+        }
+    }
+
+    private static void checkFalscheProdukte(Filiale f2) {
+        System.out.printf("name: %s, straße: %s, plz: %s\n",f2.getName(),f2.getStraße(),f2.getPlz());
+        for (Produkt i: f2.getProduktPreis().keySet()){
+            if(i.getProdNr() == null || i.getProdNr().equals("")){
+                i.setProdNr("");
+                ablehnen("","Keine ProduktId angegeben");
+                //System.out.println(i + "\n");
+            }
+            if (i.getTitel() == null){
+                ablehnen(i.getProdNr(),"Produkt hat keinen Titel");
+                //System.out.println(i + "\n");
+            }
+            //Rating wird im nachher berechnet
+            /*if(i.getRating() == -1){
+                System.out.println(i + "\n");
+            }*/
+            if(i.getVerkaufsRank() == -1){
+                ablehnen(i.getProdNr(),"Verkaufsrang ungültig");
+                //System.out.println(i + "\n");
+            }
+
+            if(i.getClass() == Buch.class){
+
+                Buch buch = (Buch) i;
+
+                if(buch.getVerlag() == null || buch.getVerlag().equals("")){
+                    ablehnen(i.getProdNr(),"Buch hat keinen Verlag");
+                    //System.out.println(buch + "\n");
+                }
+                if(buch.getAuthors().isEmpty()){
+                    ablehnen(i.getProdNr(),"Buch hat keine Autoren");
+                    //System.out.println(buch + "\n");
+                }
+                if(buch.getIsbn().equals("") || buch.getIsbn().equals("-1")){
+                    ablehnen(i.getProdNr(),"Buch hat keine oder eine ungültige ISBN");
+                    //System.out.println(buch + "\n");
+                }
+                if(buch.getSeitenZahl() == 0 || buch.getSeitenZahl() == -1){
+                    ablehnen(i.getProdNr(),"Buch hat keine oder eine ungültige Seitenanzahl");
+                    //System.out.println(buch + "\n");
+                }
+                if(buch.getErscheinungsJahr() == null || buch.getErscheinungsJahr().isAfter(LocalDate.now())){
+                    ablehnen(i.getProdNr(),"Buch hat kein oder ein ungültiges Erscheinungsdatum");
+                    //System.out.println(buch + "\n");
+                }
+
+            }else if(i.getClass() == CD.class){
+
+                CD cd = (CD) i;
+
+                if(cd.getKünstler().isEmpty()){
+                    ablehnen(i.getProdNr(),"CD hat keine Künstler");
+                    //System.out.println(cd + "\n");
+                }
+                if(cd.getLabels() == null || cd.getLabels().equals("")){
+                    ablehnen(i.getProdNr(),"CD hat kein Label");
+                    //System.out.println(cd + "\n");
+                }
+                if(cd.getTracks().isEmpty()){
+                    ablehnen(i.getProdNr(),"CD hat keine Lieder");
+                    //System.out.println(cd + "\n");
+                }
+                //Kein Erscheinungsdatum oder ein Datum in der Zukunft
+                if(cd.getErscheinungsdatum() == null || cd.getErscheinungsdatum().isAfter(LocalDate.now())){
+                    ablehnen(i.getProdNr(),"CD hat kein oder ein ungültiges Erscheinungsdatum");
+                    //System.out.println(cd + "\n");
+                }
+
+            }else if(i.getClass() == DVD.class){
+
+                DVD dvd = (DVD) i;
+
+                if(dvd.getDvdBeteiligte().isEmpty()){
+                    ablehnen(i.getProdNr(),"DVD hat keine Beteiligten");
+                    //System.out.println(dvd + "\n");
+                }
+                if(dvd.getLaufzeit() == 0 || dvd.getLaufzeit() < 0){
+                    ablehnen(i.getProdNr(),"DVD hat eine ungültige Laufzeit");
+                    //System.out.println(dvd + "\n");
+                }
+                if(dvd.getFormat() == null || dvd.getFormat().equals("")){
+                    ablehnen(i.getProdNr(),"DVD hat ein ungültiges Format");
+                    //System.out.println(dvd + "\n");
+                }
+                if(dvd.getRegionCode() < 0){
+                    ablehnen(i.getProdNr(),"DVD hat ungültigen Region code");
+                    //System.out.println(dvd + "\n");
+                }
+            }
+            //System.out.println(f2.getProduktPreis().get(i));
         }
     }
 

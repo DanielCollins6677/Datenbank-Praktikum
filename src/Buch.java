@@ -6,7 +6,7 @@ public class Buch extends Produkt{
     private List<String> authors;
     private int seitenZahl;
     private LocalDate erscheinungsJahr;
-    private long isbn;
+    private String isbn;
     private String verlag;
 
     public Buch() {
@@ -14,7 +14,8 @@ public class Buch extends Produkt{
 
     @Override
     public String toString() {
-        return "Buch{" +
+        String produktString = super.toString();
+        return produktString + " Buch{" +
                 "prodNr='" + getProdNr() + '\'' +
                 "author='" + authors + '\'' +
                 ", seitenZahl=" + seitenZahl +
@@ -48,11 +49,11 @@ public class Buch extends Produkt{
         this.erscheinungsJahr = erscheinungsJahr;
     }
 
-    public long getIsbn() {
+    public String getIsbn() {
         return isbn;
     }
 
-    public void setIsbn(long isbn) {
+    public void setIsbn(String isbn) {
         this.isbn = isbn;
     }
 

@@ -1,10 +1,9 @@
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class CD extends Produkt{
-    private String label;
+    private List<String> labels;
     private LocalDate erscheinungsdatum;
 
     private List<String> künstler = new ArrayList<>();
@@ -14,12 +13,12 @@ public class CD extends Produkt{
     public CD() {
     }
 
-    public String getLabel() {
-        return label;
+    public List<String> getLabels() {
+        return labels;
     }
 
-    public void setLabel(String label) {
-        this.label = label;
+    public void setLabels(List<String> labels) {
+        this.labels = labels;
     }
 
     public LocalDate getErscheinungsdatum() {
@@ -48,8 +47,9 @@ public class CD extends Produkt{
 
     @Override
     public String toString() {
-        return "CD{" +
-                "label='" + label + '\'' +
+        String produktString = super.toString();
+        return produktString + " CD{" +
+                "label='" + labels + '\'' +
                 ", erscheinungsdatum=" + erscheinungsdatum +
                 ", künstler=" + künstler +
                 ", tracks=" + tracks +
