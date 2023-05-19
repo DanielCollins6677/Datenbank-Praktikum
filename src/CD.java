@@ -1,10 +1,11 @@
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 public class CD extends Produkt{
     private String label;
-    private Date erscheinungsdatum;
+    private LocalDate erscheinungsdatum;
 
     private List<String> künstler = new ArrayList<>();
 
@@ -21,11 +22,11 @@ public class CD extends Produkt{
         this.label = label;
     }
 
-    public Date getErscheinungsdatum() {
+    public LocalDate getErscheinungsdatum() {
         return erscheinungsdatum;
     }
 
-    public void setErscheinungsdatum(Date erscheinungsdatum) {
+    public void setErscheinungsdatum(LocalDate erscheinungsdatum) {
         this.erscheinungsdatum = erscheinungsdatum;
     }
 

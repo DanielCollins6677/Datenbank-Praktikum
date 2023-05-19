@@ -8,6 +8,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.*;
+import java.time.LocalDate;
 import java.util.*;
 
 public class Main {
@@ -141,22 +142,38 @@ public class Main {
         String leipzigTransformed = dataPath + "\\leipzig_transformed.xml";
         String reviews = dataPath + "\\reviews.csv";
 
-        List<String> categoriesString = readFile(new File(categoriesPath));
-        //List<String> shopAndItemsString = readFile(new File(shopAndItemsPath));
-        //List<String> leipzigTransformedString = readFile(new File(leipzigTransformed));
-        //List<String> reviewsString = readFile(new File(reviews));
 
+        //lese die Kategorien aus
+        List<String> categoriesString = readFile(new File(categoriesPath));
         List<Category> categories = getCategories(categoriesString);
 
 
-
+        //Lese die Filialen aus
         try {
-            readFilialeXML(shopAndItemsPath);
-            readFilialeXML(leipzigTransformed);
+            Filiale f1 = readFilialeXML(shopAndItemsPath);
+            Filiale f2 = readFilialeXML(leipzigTransformed);
+
+
+            /*System.out.printf("name: %s, straße: %s, plz: %s\n",f1.getName(),f1.getStraße(),f1.getPlz());
+            for (Produkt i: f1.getProduktPreis().keySet()){
+                System.out.println(f1.getProduktPreis().get(i));
+            }*/
+            /*
+            System.out.printf("name: %s, straße: %s, plz: %s\n",f2.getName(),f2.getStraße(),f2.getPlz());
+            for (Produkt i: f2.getProduktPreis().keySet()){
+                System.out.println(f2.getProduktPreis().get(i));
+            }*/
 
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        //Lese die Reviews aus
+        List<String> reviewsString = readFile(new File(reviews));
+        List<Review> reviewList = readReviews(reviewsString);
+        /*for (Review review : reviewList) {
+            System.out.println(review);
+        }*/
         //System.out.println(abgelehnt);
     }
 
@@ -525,8 +542,19 @@ public class Main {
 
                     case "publication":
 
+                        try {
+                            String datum = bookspecElement.getAttribute("date");
+                            result.setErscheinungsJahr(LocalDate.parse(datum));
 
-                        result.setErscheinungsJahr(bookspecElement.getAttribute("date"));
+                        } catch (Exception e){
+                            result.setErscheinungsJahr(null);
+                        }
+
+                        //System.out.println(result.getErscheinungsJahr() + " Buch Erscheinungsjahr");
+                        break;
+
+                    default:
+                        //System.out.println(bookspecElement.getTagName());
 
                 }
             }
@@ -613,14 +641,9 @@ public class Main {
                     case "releasedate":
                         try {
                             String datum = musicspecElement.getTextContent();
-                            String[] datumElemente = datum.split("-");
-                            int[] datumInts = new int[3];
-                            for(int j = 0;j < 3; j++){
-                                datumInts[j] = Integer.parseInt(datumElemente[j]);
-                            }
-                            result.setErscheinungsdatum(new Date(datumInts[0],datumInts[1],datumInts[2]));
+                            result.setErscheinungsdatum(LocalDate.parse(datum));
 
-                            //System.out.println(result.getErscheinungsdatum());
+                            //System.out.println(result.getErscheinungsdatum() + " CD Erscheinungsdatum");
                         } catch (Exception e){
                             result.setErscheinungsdatum(null);
                         }
@@ -824,7 +847,11 @@ public class Main {
         }
 
         if(result.getPreis() != -1 && multiplier != -1){
-            result.setPreis(result.getPreis() * multiplier);
+            //verrechne den multiplier
+            double temp = result.getPreis() * multiplier;
+            //Runde auf 2. Nachkommastelle
+            temp  = Math.round(temp*100.0)/100.0;
+            result.setPreis(temp);
         }
         return result;
     }
@@ -841,5 +868,41 @@ public class Main {
                 similars.put(id,similarsElement.getAttribute("asin"));
             }
         }
+    }
+
+    private static List<Review> readReviews(List<String> reviewsString) {
+        List<Review> result = new ArrayList<>();
+
+        for(int i = 1; i < reviewsString.size();i++){
+            String reviewZeile = reviewsString.get(i);
+            //System.out.println(reviewZeile);
+
+            //Wir teilen den String am \" und bekommen so immer 14 Teile
+            //In diesen 14 Teilen sind die Informationen in 2,4,6,8,10,14
+            //Die Informationsreihenfolge ist:
+            //"product","rating","helpful","reviewdate","user","summary","content"
+            String[] reviewTeile = reviewZeile.split("\"");
+            String prodID = reviewTeile[1];
+            short rating = Short.parseShort(reviewTeile[3]);
+            int helpful = Integer.parseInt(reviewTeile[5]);
+
+            LocalDate date = null;
+            try {
+                String datum = reviewTeile[7];
+                date = LocalDate.parse(datum);
+
+            } catch (Exception e){
+            }
+
+            String userName = reviewTeile[9];
+            String summary = reviewTeile[11];
+            String content = reviewTeile[13];
+
+            Review review = new Review(prodID,rating,helpful,date,userName,summary,content);
+
+            result.add(review);
+        }
+
+        return result;
     }
 }

@@ -1,9 +1,11 @@
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 public class Buch extends Produkt{
     private List<String> authors;
     private int seitenZahl;
-    private String erscheinungsJahr;
+    private LocalDate erscheinungsJahr;
     private long isbn;
     private String verlag;
 
@@ -38,11 +40,11 @@ public class Buch extends Produkt{
         this.seitenZahl = seitenZahl;
     }
 
-    public String getErscheinungsJahr() {
+    public LocalDate getErscheinungsJahr() {
         return erscheinungsJahr;
     }
 
-    public void setErscheinungsJahr(String erscheinungsJahr) {
+    public void setErscheinungsJahr(LocalDate erscheinungsJahr) {
         this.erscheinungsJahr = erscheinungsJahr;
     }
 
