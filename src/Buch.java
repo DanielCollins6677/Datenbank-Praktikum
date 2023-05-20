@@ -16,7 +16,6 @@ public class Buch extends Produkt{
     public String toString() {
         String produktString = super.toString();
         return produktString + " Buch{" +
-                "prodNr='" + getProdNr() + '\'' +
                 "author='" + authors + '\'' +
                 ", seitenZahl=" + seitenZahl +
                 ", erscheinungsJahr=" + erscheinungsJahr +

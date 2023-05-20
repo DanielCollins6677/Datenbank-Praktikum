@@ -47,7 +47,6 @@ public class DVD extends Produkt{
     public String toString() {
         String produktString = super.toString();
         return produktString + " DVD{" +
-                "prodNr='" + getProdNr() + '\'' +
                 "format='" + format + '\'' +
                 ", laufzeit=" + laufzeit +
                 ", regionCode=" + regionCode +

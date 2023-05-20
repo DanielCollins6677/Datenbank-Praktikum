@@ -3,7 +3,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CD extends Produkt{
-    private List<String> labels;
+    private List<String> labels = new ArrayList<>();
     private LocalDate erscheinungsdatum;
 
     private List<String> künstler = new ArrayList<>();

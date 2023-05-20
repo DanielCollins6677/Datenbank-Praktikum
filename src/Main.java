@@ -48,14 +48,17 @@ public class Main {
 
         //Lese die Filialen aus
         try {
-            //Filiale f1 = readFilialeXML(shopAndItemsPath);
-            Filiale f2 = readFilialeXML(leipzigTransformed);
+            Filiale f1 = readFilialeXML(shopAndItemsPath);
+            //Filiale f2 = readFilialeXML(leipzigTransformed);
 
 
-            /*System.out.printf("name: %s, straße: %s, plz: %s\n",f1.getName(),f1.getStraße(),f1.getPlz());
+            System.out.printf("name: %s, straße: %s, plz: %s\n",f1.getName(),f1.getStraße(),f1.getPlz());
             for (Produkt i: f1.getProduktPreis().keySet()){
-                System.out.println(f1.getProduktPreis().get(i));
-            }*/
+                if(i instanceof DVD){
+                    System.out.println(i);
+                    //System.out.println(f2.getProduktPreis().get(i));
+                }
+            }
 
 
         } catch (Exception e) {
@@ -69,10 +72,11 @@ public class Main {
             System.out.println(review);
         }*/
 
-        for(String key : abgelehnt.keySet()){
+        /*for(String key : abgelehnt.keySet()){
             System.out.println(key + " wurde abgelehnt wegen:");
             System.out.println(abgelehnt.get(key) + "\n");
-        }
+        }*/
+
 
         //System.out.println(abgelehnt);
     }
@@ -497,7 +501,7 @@ public class Main {
 
                                 String author = "";
 
-                                if(authorElement.hasAttribute("name")){
+                                if(authorElement.hasAttribute("name") && !authorElement.getAttribute("name").equals("")){
                                     author = authorElement.getAttribute("name");
                                 } else {
                                     author = authorElement.getTextContent();
@@ -524,7 +528,7 @@ public class Main {
                             Node publisherNode = publisherSublist.item(j);
                             if (publisherNode != null && publisherNode.getNodeType() == Node.ELEMENT_NODE) {
                                 Element publisherElement = (Element) publisherNode;
-                                if(publisherElement.hasAttribute("name")){
+                                if(publisherElement.hasAttribute("name") && !publisherElement.getAttribute("name").equals("") ){
                                     publishers.add(publisherElement.getAttribute("name"));
                                 } else if(!publisherElement.getTextContent().equals("")){
                                     publishers.add(publisherElement.getTextContent());
@@ -673,16 +677,17 @@ public class Main {
     }
 
     private static void readLabelsXML(NodeList labelsSubNodes, CD result) {
-        List<String> labels = new ArrayList<>();
         for (int i = 0; i < labelsSubNodes.getLength(); i++) {
             Node detail = labelsSubNodes.item(i);
             if (detail != null && detail.getNodeType() == Node.ELEMENT_NODE) {
                 Element detailElement = (Element) detail;
-
-                labels.add(detailElement.getTextContent());
+                if(detailElement.hasAttribute("name") && !detailElement.getAttribute("name").equals("")){
+                    result.getLabels().add(detailElement.getAttribute("name"));
+                }else if (!detailElement.getTextContent().equals("")) {
+                    result.getLabels().add(detailElement.getTextContent());
+                }
             }
         }
-        result.setLabels(labels);
     }
 
     private static void readMusicspecs(NodeList musicspecsSubnode, CD result) {
@@ -739,8 +744,16 @@ public class Main {
                 switch (creatorsElement.getTagName()) {
 
                     case "artist":
-                        String name = creatorsElement.getTextContent();
-                        result.getKünstler().add(name);
+                        String name = "";
+
+                        if(creatorsElement.hasAttribute("name") && !creatorsElement.getAttribute("name").equals("")) {
+                            name = creatorsElement.getAttribute("name");
+                        } else if (!creatorsElement.getTextContent().equals("")){
+                            name = creatorsElement.getTextContent();
+                        }
+                        if(!name.equals("")){
+                            result.getKünstler().add(name);
+                        }
                         //System.out.println(result.getKünstler().size() + " Künstler");
                         break;
 
@@ -779,6 +792,8 @@ public class Main {
                         break;
 
                     case "creators":
+                    case "actors":
+                    case "directors":
                         NodeList creatorsSublist = detailElement.getChildNodes();
                         readCreatorsXML(creatorsSublist, result);
                         break;
@@ -804,24 +819,44 @@ public class Main {
 
                 switch (creatorsElement.getTagName()) {
 
-                    case "actor": {
-                        String name = creatorsElement.getTextContent();
-                        result.getDvdBeteiligte().add(new DVDBeteiligt(name, DVDBeteiligtenTitel.Actor));
-                        break;
-                    }
+                    case "actor":
+                        String nameActor = "";
+                        if(creatorsElement.hasAttribute("name") && !creatorsElement.getAttribute("name").equals("")) {
+                            nameActor = creatorsElement.getAttribute("name");
+                        } else if(!creatorsElement.getTextContent().equals("")){
+                            nameActor = creatorsElement.getTextContent();
+                        }
 
-                    case "creator": {
-                        String name = creatorsElement.getTextContent();
-                        result.getDvdBeteiligte().add(new DVDBeteiligt(name, DVDBeteiligtenTitel.Creator));
+                        if(!nameActor.equals("")){
+                            result.getDvdBeteiligte().add(new DVDBeteiligt(nameActor, DVDBeteiligtenTitel.Actor));
+                        }
                         break;
-                    }
 
-                    case "director": {
-                        String name = creatorsElement.getTextContent();
-                        result.getDvdBeteiligte().add(new DVDBeteiligt(name, DVDBeteiligtenTitel.Director));
+
+                    case "creator":
+                        String nameCreator = "";
+                        if(creatorsElement.hasAttribute("name") && !creatorsElement.getAttribute("name").equals("")) {
+                            nameCreator = creatorsElement.getAttribute("name");
+                        } else if(!creatorsElement.getTextContent().equals("")){
+                            nameCreator = creatorsElement.getTextContent();
+                        }
+
+                        if(!nameCreator.equals("")){
+                            result.getDvdBeteiligte().add(new DVDBeteiligt(nameCreator, DVDBeteiligtenTitel.Creator));
+                        }
                         break;
-                    }
-                    default:
+
+
+                    case "director":
+                        String nameDirector = "";
+                        if(creatorsElement.hasAttribute("name") && !creatorsElement.getAttribute("name").equals("")) {
+                            nameDirector = creatorsElement.getAttribute("name");
+                        } else if(!creatorsElement.getTextContent().equals("")){
+                            nameDirector = creatorsElement.getTextContent();
+                        }
+                        if(!nameDirector.equals("")){
+                            result.getDvdBeteiligte().add(new DVDBeteiligt(nameDirector, DVDBeteiligtenTitel.Director));
+                        }
 
                 }
             }
@@ -964,7 +999,7 @@ public class Main {
                 //System.out.println(i + "\n");
             }
 
-            if(i.getClass() == Buch.class){
+            if(i instanceof  Buch){
 
                 Buch buch = (Buch) i;
 
@@ -989,7 +1024,7 @@ public class Main {
                     //System.out.println(buch + "\n");
                 }
 
-            }else if(i.getClass() == CD.class){
+            }else if(i instanceof  CD){
 
                 CD cd = (CD) i;
 
@@ -1011,7 +1046,7 @@ public class Main {
                     //System.out.println(cd + "\n");
                 }
 
-            }else if(i.getClass() == DVD.class){
+            }else if(i instanceof  DVD){
 
                 DVD dvd = (DVD) i;
 
