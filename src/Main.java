@@ -48,7 +48,7 @@ public class Main {
 
         //Lese die Filialen aus
         try {
-            Filiale f1 = readFilialeXML(shopAndItemsPath);
+            //Filiale f1 = readFilialeXML(shopAndItemsPath);
             Filiale f2 = readFilialeXML(leipzigTransformed);
 
 
@@ -494,7 +494,15 @@ public class Main {
                             Node authorNode = authorSubNodes.item(j);
                             if (authorNode != null && authorNode.getNodeType() == Node.ELEMENT_NODE) {
                                 Element authorElement = (Element) authorNode;
-                                String author = authorElement.getTextContent();
+
+                                String author = "";
+
+                                if(authorElement.hasAttribute("name")){
+                                    author = authorElement.getAttribute("name");
+                                } else {
+                                    author = authorElement.getTextContent();
+                                }
+
                                 if(!author.equals("")){
                                     authors.add(author);
                                 } else {
@@ -509,22 +517,22 @@ public class Main {
 
                     case "publishers":
 
-                        String publisher = "";
+                        List<String> publishers = new ArrayList<>();
 
                         NodeList publisherSublist = detailElement.getChildNodes();
                         for (int j = 0; j < publisherSublist.getLength(); j++) {
                             Node publisherNode = publisherSublist.item(j);
                             if (publisherNode != null && publisherNode.getNodeType() == Node.ELEMENT_NODE) {
                                 Element publisherElement = (Element) publisherNode;
-                                if (!publisher.equals("")) {
-                                    publisher = "mehrere Publisher";
-                                    break;
+                                if(publisherElement.hasAttribute("name")){
+                                    publishers.add(publisherElement.getAttribute("name"));
+                                } else if(!publisherElement.getTextContent().equals("")){
+                                    publishers.add(publisherElement.getTextContent());
                                 }
-                                publisher = publisherElement.getTextContent();
                             }
                         }
 
-                        result.setVerlag(publisher);
+                        result.setVerlag(publishers);
 
                         break;
 
@@ -960,7 +968,7 @@ public class Main {
 
                 Buch buch = (Buch) i;
 
-                if(buch.getVerlag() == null || buch.getVerlag().equals("")){
+                if(buch.getVerlag().isEmpty()){
                     ablehnen(i.getProdNr(),"Buch hat keinen Verlag");
                     //System.out.println(buch + "\n");
                 }
@@ -989,7 +997,7 @@ public class Main {
                     ablehnen(i.getProdNr(),"CD hat keine Künstler");
                     //System.out.println(cd + "\n");
                 }
-                if(cd.getLabels() == null || cd.getLabels().equals("")){
+                if(cd.getLabels().isEmpty()){
                     ablehnen(i.getProdNr(),"CD hat kein Label");
                     //System.out.println(cd + "\n");
                 }

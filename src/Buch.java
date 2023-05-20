@@ -7,7 +7,7 @@ public class Buch extends Produkt{
     private int seitenZahl;
     private LocalDate erscheinungsJahr;
     private String isbn;
-    private String verlag;
+    private List<String> verlag;
 
     public Buch() {
     }
@@ -57,11 +57,11 @@ public class Buch extends Produkt{
         this.isbn = isbn;
     }
 
-    public String getVerlag() {
+    public List<String> getVerlag() {
         return verlag;
     }
 
-    public void setVerlag(String verlag) {
+    public void setVerlag(List<String> verlag) {
         this.verlag = verlag;
     }
 }
