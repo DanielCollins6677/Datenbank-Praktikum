@@ -1,3 +1,5 @@
+package DataClasses;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,7 +45,7 @@ public class Category {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder("Category{parentCategory='");
+        StringBuilder sb = new StringBuilder("DataClasses.Category{parentCategory='");
         sb.append(parentCategory).append("\'name='").append(name).append("\', items=").append(items).append('}');
 
         return sb.toString();

@@ -1,3 +1,5 @@
+package DataClasses;
+
 import java.time.LocalDate;
 import java.util.Date;
 
@@ -87,7 +89,7 @@ public class Review {
 
     @Override
     public String toString() {
-        return "Review{" +
+        return "DataClasses.Review{" +
                 "ProdID='" + ProdID + '\'' +
                 ", rating=" + rating +
                 ", helpful=" + helpful +

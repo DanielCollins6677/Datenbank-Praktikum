@@ -1,3 +1,5 @@
+package DataClasses;
+
 import java.util.List;
 import java.util.Map;
 
@@ -51,7 +53,7 @@ public class Filiale {
 
     @Override
     public String toString() {
-        return "Filiale{" +
+        return "DataClasses.Filiale{" +
                 "name='" + name + '\'' +
                 ", plz=" + plz +
                 ", straße='" + straße + '\'' +

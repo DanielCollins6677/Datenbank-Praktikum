@@ -13,9 +13,9 @@ Folgende Fragen sollen mittels SQL beantwortet werden. Die SQL-Statements und di
 
 
 
-1. Wieviele Produkte jeden Typs (Buch, Musik-CD, DVD) sind in der Datenbank erfasst? Hinweis: Geben Sie das Ergebnis in einer 3-spaltigen Relation aus.
+1. Wieviele Produkte jeden Typs (DataClasses.Buch, Musik-DataClasses.CD, DataClasses.DVD) sind in der Datenbank erfasst? Hinweis: Geben Sie das Ergebnis in einer 3-spaltigen Relation aus.
 
-2. Nennen Sie die 5 besten Produkte jedes Typs (Buch, Musik-CD, DVD) sortiert nach dem durchschnittlichem Rating. Hinweis: Geben Sie das Ergebnis in einer einzigen Relation mit den Attributen Typ, ProduktNr, Rating aus.
+2. Nennen Sie die 5 besten Produkte jedes Typs (DataClasses.Buch, Musik-DataClasses.CD, DataClasses.DVD) sortiert nach dem durchschnittlichem Rating. Hinweis: Geben Sie das Ergebnis in einer einzigen Relation mit den Attributen Typ, ProduktNr, Rating aus.
 
 3. Für welche Produkte gibt es im Moment kein Angebot?
 
@@ -29,11 +29,11 @@ Folgende Fragen sollen mittels SQL beantwortet werden. Die SQL-Statements und di
 
 8. Geben Sie eine duplikatfreie und alphabetisch sortierte Liste der Namen aller Buchautoren an, die auch an DVDs oder Musik-CDs beteiligt sind.
 
-9. Wie hoch ist die durchschnittliche Anzahl von Liedern einer Musik-CD?
+9. Wie hoch ist die durchschnittliche Anzahl von Liedern einer Musik-DataClasses.CD?
 
-10. Für welche Produkte gibt es ähnliche Produkte in einer anderen Hauptkategorie? Hinweis: Eine Hauptkategorie ist eine Produktkategorie ohne Oberkategorie. Erstellen Sie eine rekursive Anfrage, die zu jedem Produkt dessen Hauptkategorie bestimmt.
+10. Für welche Produkte gibt es ähnliche Produkte in einer anderen Hauptkategorie? Hinweis: Eine Hauptkategorie ist eine Produktkategorie ohne Oberkategorie. Erstellen Sie eine rekursive Anfrage, die zu jedem DataClasses.Produkt dessen Hauptkategorie bestimmt.
 
-11. Welche Produkte werden in allen Filialen angeboten? Hinweis: Ihre Query muss so formuliert werden, dass sie für eine beliebige Anzahl von Filialen funktioniert. Hinweis: Beachten Sie, dass ein Produkt mehrfach von einer Filiale angeboten werden kann (z.B. neu und gebraucht).
+11. Welche Produkte werden in allen Filialen angeboten? Hinweis: Ihre Query muss so formuliert werden, dass sie für eine beliebige Anzahl von Filialen funktioniert. Hinweis: Beachten Sie, dass ein DataClasses.Produkt mehrfach von einer DataClasses.Filiale angeboten werden kann (z.B. neu und gebraucht).
 
 12. In wieviel Prozent der Fälle der Frage 11 gibt es in Leipzig das preiswerteste Angebot?
 

@@ -2,22 +2,22 @@
 
 In der Datenbank sollen Informationen eines "Media Stores" abgebildet werden.
 
-Der "Media Store" enthält eine Vielzahl von Produkten, die durch Titel, Rating, Verkaufsrang, eindeutige Produktnummer und (optional) ein Bild gekennzeichnet sind. Die in unserer Miniwelt betrachteten Produkte sind Bücher, Musik-CDs und DVDs. Für Bücher werden Autoren, Seitenzahl, Erscheinungsdatum, ISBN-Nummer und der herausgebende Verlag gespeichert. DVDs besitzen neben einem Format, einer Laufzeit und einem Region-Code auch beteiligte Personen (Actor, Creator und Director). Musik-CDs stammen von mindestens einem Künstler und haben außer Label und Erscheinungsdatum auch eine Liste von Titeln, die durch ihren Namen gegeben sind.
+Der "Media Store" enthält eine Vielzahl von Produkten, die durch Titel, Rating, Verkaufsrang, eindeutige Produktnummer und (optional) ein Bild gekennzeichnet sind. Die in unserer Miniwelt betrachteten Produkte sind Bücher, Musik-CDs und DVDs. Für Bücher werden Autoren, Seitenzahl, Erscheinungsdatum, ISBN-Nummer und der herausgebende Verlag gespeichert. DVDs besitzen neben einem Format, einer Laufzeit und einem Region-Code auch beteiligte Personen (Actor, Creator und Director). Musik-CDs stammen von mindestens einem DataClasses.Künstler und haben außer Label und Erscheinungsdatum auch eine Liste von Titeln, die durch ihren Namen gegeben sind.
 
-Zur besseren Orientierung im Produktkatalog ist jedes Produkt einer Kategorie oder mehreren Kategorien zugeordnet. Jede Kategorie hat einen Namen. Des Weiteren sind die Kategorien hierarchisch angeordnet, d.h. eine Kategorie kann eine oder mehrere Unterkategorien besitzen. Kategorien, die selbst keine Unterkategorie einer anderen Kategorie sind, werden Hauptkategorien genannt. Zu jedem Produkt kann es eine Menge ähnlicher Produkte geben.
+Zur besseren Orientierung im Produktkatalog ist jedes DataClasses.Produkt einer Kategorie oder mehreren Kategorien zugeordnet. Jede Kategorie hat einen Namen. Des Weiteren sind die Kategorien hierarchisch angeordnet, d.h. eine Kategorie kann eine oder mehrere Unterkategorien besitzen. Kategorien, die selbst keine Unterkategorie einer anderen Kategorie sind, werden Hauptkategorien genannt. Zu jedem DataClasses.Produkt kann es eine Menge ähnlicher Produkte geben.
 
-Produkte im "Media Store" werden von verschiedenen Fillialen (charakterisiert durch Namen und Anschrift) zu unterschiedlichen Konditionen (Preis, Verfügbarkeit, Zustand) angeboten, so dass Kunden diese über einen Online-Filiale kaufen können. Die Verfügbarkeit ist dadurch gekennzeichnet, ob ein Preis vorliegt oder nicht. Jeder Kunde kann - nach Angabe von Lieferadresse und Kontonummer - mehrere Produkte zu verschiedenen Zeiten kaufen. Der Online-Filiale des "Media Stores" bietet Kunden weiterhin die Möglichkeit, Produkte zu bewerten. Dazu können sie eine Kundenrezension schreiben und für das Produkt ein bis fünf Punkte vergeben.
+Produkte im "Media Store" werden von verschiedenen Fillialen (charakterisiert durch Namen und Anschrift) zu unterschiedlichen Konditionen (Preis, Verfügbarkeit, Zustand) angeboten, so dass Kunden diese über einen Online-DataClasses.Filiale kaufen können. Die Verfügbarkeit ist dadurch gekennzeichnet, ob ein Preis vorliegt oder nicht. Jeder Kunde kann - nach Angabe von Lieferadresse und Kontonummer - mehrere Produkte zu verschiedenen Zeiten kaufen. Der Online-DataClasses.Filiale des "Media Stores" bietet Kunden weiterhin die Möglichkeit, Produkte zu bewerten. Dazu können sie eine Kundenrezension schreiben und für das DataClasses.Produkt ein bis fünf Punkte vergeben.
 
 ## Hinweise
 
 
 - Die Kategoriennamen sind nicht eindeutig, d.h. es kann zwei verschiedene Kategorien mit gleichem Namen geben. Wie kann man dennoch eine eindeutige Kennung für eine Kategorie definieren?
 - Klären Sie, ob die Relation “ähnliche Produkte” symmetrisch ist und ob dies Auswirkungen auf Ihr Modell und auf spätere Anfragen hat.
-- Wie soll das Rating für ein Produkt aus den Kundenrezensionen ermittelt werden?
+- Wie soll das Rating für ein DataClasses.Produkt aus den Kundenrezensionen ermittelt werden?
 
 - Wie bei jedem Programmentwurf sollten Sie auch hier schon an spätere Tests Ihrer Datenbank denken. Bedenken Sie deshalb schon bei der konzeptionellen Arbeit, daß Sie in Teilaufgabe 2 u.a. folgende oder ähnliche umgangssprachlich formulierte Testfragen unter Zuhilfenahme passender SQL-Statements beantworten sollen:
 
-    1. Wieviele Produkte jeden Typs (Buch, Musik-CD, DVD) sind in der Datenbank erfasst?
+    1. Wieviele Produkte jeden Typs (DataClasses.Buch, Musik-DataClasses.CD, DataClasses.DVD) sind in der Datenbank erfasst?
 
     2. Nennen Sie die 5 besten Produkte jeder Hauptkategorie sortiert nach dem durchschnittlichem Rating.
 
@@ -33,11 +33,11 @@ Produkte im "Media Store" werden von verschiedenen Fillialen (charakterisiert du
 
     8. Geben Sie eine duplikatfreie und alphabetisch sortierte Liste der Namen aller Buchautoren an, die auch an DVDs oder Musik-CSs beteiligt sind.
 
-    9. Wie hoch ist die durchschnittliche Anzahl von Liedern einer Musik-CD?
+    9. Wie hoch ist die durchschnittliche Anzahl von Liedern einer Musik-DataClasses.CD?
 
     10. Für welche Produkte gibt es ähnliche Produkte in einer anderen Hauptkategorie?
 
-    11. Wieviele Kunden haben ein Produkt doppelt gekauft?
+    11. Wieviele Kunden haben ein DataClasses.Produkt doppelt gekauft?
 
     12. Wie hoch ist der durschnittliche Preis eines Warenkorbs, d.h. die durchschnittliche Summe der Preise aller Produkte, die zur gleichen Zeit gekauft wurden?
 

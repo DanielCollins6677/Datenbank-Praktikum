@@ -44,7 +44,7 @@ Relationenmodell mit Primärschlüssel und Fremdschlüsselbeziehungen
 - Datei zur Erzeugung Ihres Datenbankschemas, inklusive aller dort enthaltenen Statements zur Integritätssicherung
 - kommentiertes Java-Ladeprogramm bzw. SQL Statements zur XML-Transformation
 - Datei/Relation mit den abgelehnten Datensätzen, die für jede gefundene Inkonsistenz folgendes (oder ein ähnliches) Format aufweisen soll:
-  - ERROR: Entityname (Stadt,Land,Produkt,…), Name des fehlerhaften Attributs, System- oder selbst formulierte Fehlermeldung
+  - ERROR: Entityname (Stadt,Land,DataClasses.Produkt,…), Name des fehlerhaften Attributs, System- oder selbst formulierte Fehlermeldung
   - Dieses Fehlerprotokoll soll durch Ihr Ladeprogramm automatisch erzeugt werden. Wie viele Fehler welcher Art gab es jeweils?
 
 

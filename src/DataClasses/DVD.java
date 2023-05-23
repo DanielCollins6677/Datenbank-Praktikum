@@ -1,6 +1,7 @@
+package DataClasses;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class DVD extends Produkt{
     private String format;
@@ -46,7 +47,7 @@ public class DVD extends Produkt{
     @Override
     public String toString() {
         String produktString = super.toString();
-        return produktString + " DVD{" +
+        return produktString + " DataClasses.DVD{" +
                 "format='" + format + '\'' +
                 ", laufzeit=" + laufzeit +
                 ", regionCode=" + regionCode +

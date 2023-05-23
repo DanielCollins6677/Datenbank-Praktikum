@@ -221,7 +221,7 @@
 <item>B0007CIH0Q</item>
 <item>B0007QRARS</item>
 <item>B0009A3PNU</item></category></category>
-<category>DVD-Audio
+<category>DataClasses.DVD-Audio
 <category>Pop
 <item>B0000PCBFW</item></category>
 <category>Rock
@@ -252,7 +252,7 @@
 <category>Nach Herkunft der Autoren
 <category>Amerikanische &amp; Kanadische Literatur&amp; Erzählungen</category>
 <category>Amerikanische Autoren
-<category>CD
+<category>DataClasses.CD
 <item>3491911575</item>
 <item>3866040687</item>
 <item>3898303446</item>
@@ -277,7 +277,7 @@
 <item>3898303039</item>
 <item>3898304590</item>
 <item>389830695X</item></category></category></category>
-<category>CD
+<category>DataClasses.CD
 <item>3833714212</item>
 <item>3833714220</item>
 <item>3898132714</item>
@@ -291,7 +291,7 @@
 <category>Ende, Michaelungsliteratur&amp; Erzählungen</category>
 <category>Eschbach, Andreas&amp; Erzählungen</category></category>
 <category>Englische Autoren
-<category>CD
+<category>DataClasses.CD
 <item>051</item>
 <item>3491240735</item>
 <item>3866040059</item>
@@ -314,10 +314,10 @@
 <item>3899407334</item>
 <item>3935036825</item></category></category>
 <category>Französische Autoren
-<category>CD
+<category>DataClasses.CD
 <item>3866040695</item></category></category>
 <category>Noch mehr Autoren
-<category>CD
+<category>DataClasses.CD
 <item>3886985113</item>
 <item>3899402553</item>
 <item>3899402669</item>
@@ -915,7 +915,7 @@
 <item>3491911575</item>
 <item>3898303446</item></category>
 <category>Amerikanische Autoren
-<category>CD</category></category>
+<category>DataClasses.CD</category></category>
 <category>Deutschsprachige Autoren
 <category>Autoren, A-Z
 <category>A-C
@@ -928,16 +928,16 @@
 <category>May, Karl</category></category>
 <category>P-R
 <category>Rilke, Rainer M.</category></category></category>
-<category>CD</category>
+<category>DataClasses.CD</category>
 <category>Ende, Michael&amp; Erzählungen</category>
 <category>Ende, Michaelungsliteratur&amp; Erzählungen</category>
 <category>Eschbach, Andreas&amp; Erzählungen</category></category>
 <category>Englische Autoren
-<category>CD</category></category>
+<category>DataClasses.CD</category></category>
 <category>Französische Autoren
-<category>CD</category></category>
+<category>DataClasses.CD</category></category>
 <category>Noch mehr Autoren
-<category>CD</category></category></category>
+<category>DataClasses.CD</category></category></category>
 <category>Nach Themen
 <category>Arztromane&amp; Erzählungen</category>
 <category>Familie
@@ -965,7 +965,7 @@
 <category>May, Karl</category></category>
 <category>P-R
 <category>Rilke, Rainer M.</category></category></category>
-<category>CD</category>
+<category>DataClasses.CD</category>
 <category>Ende, Michael&amp; Erzählungen</category>
 <category>Ende, Michaelungsliteratur&amp; Erzählungen</category>
 <category>Eschbach, Andreas&amp; Erzählungen</category>
@@ -980,7 +980,7 @@
 <category>May, Karl</category></category>
 <category>P-R
 <category>Rilke, Rainer M.</category></category></category>
-<category>CD</category>
+<category>DataClasses.CD</category>
 <category>Ende, Michael&amp; Erzählungen</category>
 <category>Ende, Michaelungsliteratur&amp; Erzählungen</category>
 <category>Eschbach, Andreas&amp; Erzählungen</category></category>
@@ -2211,7 +2211,7 @@
 <item>B000A7X7PI</item>
 <item>B000A7X7PS</item>
 <item>B000BFH3M2</item></category>
-<category>DVD-Singles
+<category>DataClasses.DVD-Singles
 <item>B00005JRTD</item>
 <item>B0006ICFI6</item>
 <item>B000AMF7MO</item>
@@ -3649,7 +3649,7 @@
 <item>3934029140</item></category></category></category>
 <category>Nach Herkunft der Autoren
 <category>Amerikanische Autoren
-<category>CD</category></category>
+<category>DataClasses.CD</category></category>
 <category>Amerikanische &amp; Kanadische Literatur&amp; Erzählungen</category>
 <category>Deutschsprachige Autoren
 <category>Autoren, A-Z
@@ -3663,16 +3663,16 @@
 <category>May, Karl</category></category>
 <category>P-R
 <category>Rilke, Rainer M.</category></category></category>
-<category>CD</category>
+<category>DataClasses.CD</category>
 <category>Ende, Michael&amp; Erzählungen</category>
 <category>Ende, Michaelungsliteratur&amp; Erzählungen</category>
 <category>Eschbach, Andreas&amp; Erzählungen</category></category>
 <category>Englische Autoren
-<category>CD</category></category>
+<category>DataClasses.CD</category></category>
 <category>Französische Autoren
-<category>CD</category></category>
+<category>DataClasses.CD</category></category>
 <category>Noch mehr Autoren
-<category>CD</category></category></category>
+<category>DataClasses.CD</category></category></category>
 <category>Alle Romane &amp; Erzählungen&amp; Erzählungen</category>
 <category>Anthologien&amp; Erzählungen
 <item>3899407180</item></category>
@@ -3742,7 +3742,7 @@
 <category>May, Karl</category></category>
 <category>P-R
 <category>Rilke, Rainer M.</category></category></category>
-<category>CD</category>
+<category>DataClasses.CD</category>
 <category>Ende, Michael&amp; Erzählungen</category>
 <category>Ende, Michaelungsliteratur&amp; Erzählungen
 <item>3522176847</item></category>
@@ -3758,7 +3758,7 @@
 <category>May, Karl</category></category>
 <category>P-R
 <category>Rilke, Rainer M.</category></category></category>
-<category>CD</category>
+<category>DataClasses.CD</category>
 <category>Ende, Michael&amp; Erzählungen
 <item>3522166108</item>
 <item>3522176502</item>
@@ -3827,7 +3827,7 @@
 <category>Kabarett&amp; Kabarett
 <item>B00000ASSO</item>
 <item>B00000ASSP</item></category>
-<category>Künstler
+<category>DataClasses.Künstler
 <category>Loriot&amp; Kabarett
 <item>B0000XKBC4</item>
 <item>B0006L7MLI</item></category>
@@ -4734,7 +4734,7 @@
 <category>Honorarordnung für Architekten&amp; Comics
 <item>3423055960</item></category></category>
 <category>Film
-<category>Buch zum Film&amp; Fernsehen&amp; Comics
+<category>DataClasses.Buch zum Film&amp; Fernsehen&amp; Comics
 <item>3499213362</item></category>
 <category>Fernsehserien
 <category>Überblick&amp; Fernsehen&amp; Comics
@@ -4753,7 +4753,7 @@
 <category>Star Wars&amp; Fantasy&amp; Fernsehen&amp; Comics
 <item>3401057413</item></category></category></category></category>
 <category>Malerei
-<category>Einzelne Künstler, E-L
+<category>Einzelne DataClasses.Künstler, E-L
 <category>Hundertwasser, Friedensreich&amp; Skulptur&amp; Comics
 <item>3782708989</item></category>
 <category>Kahlo, Frida&amp; Skulptur&amp; Comics
@@ -6142,7 +6142,7 @@
 <item>B0002H24N2</item>
 <item>B0006QAI5K</item>
 <item>B000AYQDW0</item></category></category></category>
-<category>Künstler A-Z
+<category>DataClasses.Künstler A-Z
 <category>A
 <category>Adams, Oleta&amp; Blues
 <item>B0002ZCJM0</item></category>
@@ -8406,7 +8406,7 @@
 <category>Nach Herkunft der Autoren
 <category>Amerikanische &amp; Kanadische Literatur&amp; Erzählungen</category>
 <category>Amerikanische Autoren
-<category>CD</category></category>
+<category>DataClasses.CD</category></category>
 <category>Deutschsprachige Autoren
 <category>Autoren, A-Z
 <category>A-C
@@ -8419,16 +8419,16 @@
 <category>May, Karl</category></category>
 <category>P-R
 <category>Rilke, Rainer M.</category></category></category>
-<category>CD</category>
+<category>DataClasses.CD</category>
 <category>Ende, Michael&amp; Erzählungen</category>
 <category>Ende, Michaelungsliteratur&amp; Erzählungen</category>
 <category>Eschbach, Andreas&amp; Erzählungen</category></category>
 <category>Englische Autoren
-<category>CD</category></category>
+<category>DataClasses.CD</category></category>
 <category>Französische Autoren
-<category>CD</category></category>
+<category>DataClasses.CD</category></category>
 <category>Noch mehr Autoren
-<category>CD</category></category></category>
+<category>DataClasses.CD</category></category></category>
 <category>Nach Themen
 <category>Arztromane&amp; Erzählungen</category>
 <category>Familie
@@ -8475,7 +8475,7 @@
 <category>May, Karl</category></category>
 <category>P-R
 <category>Rilke, Rainer M.</category></category></category>
-<category>CD</category>
+<category>DataClasses.CD</category>
 <category>Ende, Michael&amp; Erzählungen</category>
 <category>Ende, Michaelungsliteratur&amp; Erzählungen</category>
 <category>Eschbach, Andreas&amp; Erzählungen</category>
@@ -8490,7 +8490,7 @@
 <category>May, Karl</category></category>
 <category>P-R
 <category>Rilke, Rainer M.</category></category></category>
-<category>CD</category>
+<category>DataClasses.CD</category>
 <category>Ende, Michael&amp; Erzählungen</category>
 <category>Ende, Michaelungsliteratur&amp; Erzählungen</category>
 <category>Eschbach, Andreas&amp; Erzählungen</category></category>
@@ -41848,7 +41848,7 @@
 <item>B000AMVY7Q</item></category>
 <category>Boogie-Woogie&amp; Oldies
 <item>B0000046F9</item></category>
-<category>Künstler
+<category>DataClasses.Künstler
 <category>Alexander, Peter&amp; Oldies
 <item>B0000AGDZ4</item>
 <item>B00077W5T0</item></category>
@@ -43854,7 +43854,7 @@
 <item>6305610444</item>
 <item>B00004UF05</item>
 <item>B00005QX8H</item></category></category>
-<category>Filiale-Überblick
+<category>DataClasses.Filiale-Überblick
 <category>Bollywood
 <category>Musik
 <item>B00005QBEF</item>
@@ -45191,7 +45191,7 @@
 <item>B0009ZC3ZG</item>
 <item>B000BGHBK0</item>
 <item>B000BPNCXQ</item></category></category></category>
-<category>DVD-Hits unter 15 EUR
+<category>DataClasses.DVD-Hits unter 15 EUR
 <category>Kinder &amp; Familie
 <item>B000084H9O</item>
 <item>B0000C6IW5</item>
@@ -45683,7 +45683,7 @@
 <item>B00008RWRI</item>
 <item>B0001WGDX0</item>
 <item>B0001WGDXA</item></category>
-<category>DG 2 CD&amp; Philips
+<category>DG 2 DataClasses.CD&amp; Philips
 <item>B000001GYC</item>
 <item>B000009CMP</item></category>
 <category>Dokumente&amp; Philips
@@ -45807,13 +45807,13 @@
 <item>B0007VEPY4</item>
 <item>B000A6QY40</item>
 <item>B000B2XZ22</item></category></category>
-<category>GC Test DVD
+<category>GC Test DataClasses.DVD
 <item>B00008AWUZ</item>
 <item>B00008OP0H</item>
 <item>B00008S7KC</item>
 <item>B00009LW5L</item>
 <item>B00009QNXX</item></category>
-<category>GC Test Music &amp; DVD
+<category>GC Test Music &amp; DataClasses.DVD
 <item>3190028516</item>
 <item>B0000676WX</item>
 <item>B00008MLSH</item>
@@ -45838,7 +45838,7 @@
 <item>B00004T0UM</item></category></category>
 <category>Gutschein Dezember 2003
 <item>B0000A01J6</item></category>
-<category>Gutschein Test CD-DVD-Liste
+<category>Gutschein Test DataClasses.CD-DataClasses.DVD-Liste
 <item>B00005MIX4</item>
 <item>B00007BKGT</item>
 <item>B00008AWUZ</item>
@@ -46066,7 +46066,7 @@
 <item>B0000DJURY</item>
 <item>B00020Q386</item>
 <item>B0002XV2XO</item></category></category>
-<category>Klassiker auf DVD
+<category>Klassiker auf DataClasses.DVD
 <item>B00005NJJ9</item>
 <category>Box-Sets
 <item>B000266XCG</item>
@@ -46545,9 +46545,9 @@
 <category>Nach Herkunft der Autoren
 <category>Amerikanische &amp; Kanadische Literatur&amp; Erzählungen</category>
 <category>Amerikanische Autoren
-<category>CD</category></category>
+<category>DataClasses.CD</category></category>
 <category>Deutschsprachige Autoren
-<category>CD</category>
+<category>DataClasses.CD</category>
 <category>Autoren, A-Z
 <category>A-C
 <category>Bachmann, Ingeborg</category></category>
@@ -46563,11 +46563,11 @@
 <category>Ende, Michaelungsliteratur&amp; Erzählungen</category>
 <category>Eschbach, Andreas&amp; Erzählungen</category></category>
 <category>Englische Autoren
-<category>CD</category></category>
+<category>DataClasses.CD</category></category>
 <category>Französische Autoren
-<category>CD</category></category>
+<category>DataClasses.CD</category></category>
 <category>Noch mehr Autoren
-<category>CD</category></category></category>
+<category>DataClasses.CD</category></category></category>
 <category>Romane &amp; Erzählungen</category>
 <category>Science Fiction, Fantasy
 <category>Taschenbücher&amp; Horror
@@ -48147,9 +48147,9 @@
 <category>Nach Herkunft der Autoren
 <category>Amerikanische &amp; Kanadische Literatur&amp; Erzählungen</category>
 <category>Amerikanische Autoren
-<category>CD</category></category>
+<category>DataClasses.CD</category></category>
 <category>Deutschsprachige Autoren
-<category>CD</category>
+<category>DataClasses.CD</category>
 <category>Autoren, A-Z
 <category>A-C
 <category>Bachmann, Ingeborg</category></category>
@@ -48165,11 +48165,11 @@
 <category>Ende, Michaelungsliteratur&amp; Erzählungen</category>
 <category>Eschbach, Andreas&amp; Erzählungen</category></category>
 <category>Englische Autoren
-<category>CD</category></category>
+<category>DataClasses.CD</category></category>
 <category>Französische Autoren
-<category>CD</category></category>
+<category>DataClasses.CD</category></category>
 <category>Noch mehr Autoren
-<category>CD</category></category></category>
+<category>DataClasses.CD</category></category></category>
 <category>Romane &amp; Erzählungen</category>
 <category>Science Fiction, Fantasy
 <category>Taschenbücher&amp; Horror</category>

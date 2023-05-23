@@ -1,3 +1,5 @@
+package DataClasses;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -48,7 +50,7 @@ public class CD extends Produkt{
     @Override
     public String toString() {
         String produktString = super.toString();
-        return produktString + " CD{" +
+        return produktString + " DataClasses.CD{" +
                 "label='" + labels + '\'' +
                 ", erscheinungsdatum=" + erscheinungsdatum +
                 ", künstler=" + künstler +

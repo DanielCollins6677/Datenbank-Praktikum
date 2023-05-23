@@ -31,7 +31,7 @@ Hier sollte die Datenbankverbindung für die anderen Methodenaufrufe erstellt, s
 Damit die Mittelschicht alle Ressourcen kontrolliert wieder freigeben kann, wird diese Methode bei Beendigung der Anwendung aufgerufen. Hier sollten speziell die Datenbankobjekte wieder freigegeben werden.
 
     getProduct
-Für eine bestimmte Produkt-Id werden mit dieser Methode die Detailinformationen des Produkts ermittelt.
+Für eine bestimmte DataClasses.Produkt-Id werden mit dieser Methode die Detailinformationen des Produkts ermittelt.
 
     getProducts(String pattern)
 Diese Methode soll eine Liste der in der Datenbank enthaltenen Produkte, deren Titel mit dem übergebenen Pattern übereinstimmen, zurückliefern. Beachten Sie, dass im Falle von pattern=null die komplette Liste zurückgeliefert wird. Das Pattern kann SQL-Wildcards enthalten.
@@ -39,7 +39,7 @@ Diese Methode soll eine Liste der in der Datenbank enthaltenen Produkte, deren T
 Hinweis: der Patternvergleich kann mittels des SQL-Operators like durchgeführt werden.
     
     getCategoryTree
-Diese Methode ermittelt den kompletten Kategorienbaum durch Rückgabe des Wurzelknotens. Jeder Knoten ist dabei vom Typ Category und kann eine Liste von Unterknoten (d.h. Unterkategorien) enthalten.
+Diese Methode ermittelt den kompletten Kategorienbaum durch Rückgabe des Wurzelknotens. Jeder Knoten ist dabei vom Typ DataClasses.Category und kann eine Liste von Unterknoten (d.h. Unterkategorien) enthalten.
 
     getProductsByCategoryPath
 Nach Angabe einer Kategorie (definiert durch den Pfad von der Wurzel zu sich selbst) soll die Liste der zugeordneten Produkte ermittelt werden. Die Angabe des Pfades ist notwendig, da der Kategorienname allein nicht eindeutig ist.
@@ -48,15 +48,15 @@ Nach Angabe einer Kategorie (definiert durch den Pfad von der Wurzel zu sich sel
 Diese Methode liefert eine Liste aller Produkte zurück, die unter den Top k sind basierend auf dem Rating.
 
     getSimilarCheaperProduct
-Diese Methode liefert für ein Produkt(Id) eine List von Produkten, die ähnlich und billiger sind als das spezifizierte.     
+Diese Methode liefert für ein DataClasses.Produkt(Id) eine List von Produkten, die ähnlich und billiger sind als das spezifizierte.     
 
     addNewReview
-Die Rahmenapplikation erlaubt sowohl das Ansehen als auch Hinzufügen von Reviews. MIt Hilfe der Methode wird ein neues Review in der Datenbank gespeichert.
+Die Rahmenapplikation erlaubt sowohl das Ansehen als auch Hinzufügen von Reviews. MIt Hilfe der Methode wird ein neues DataClasses.Review in der Datenbank gespeichert.
 
     getTrolls
 Die Methode soll eine Liste von Nutzern ausgeben, deren Durchschnittsbewertung unter einem spezifizierten Rating ist.
     
     getOffers
-Für das übergegebene Produkt(Id) werden alle verfügbaren Angebote zurückgeliefert.
+Für das übergegebene DataClasses.Produkt(Id) werden alle verfügbaren Angebote zurückgeliefert.
 
 

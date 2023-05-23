@@ -1,5 +1,6 @@
+package DataClasses;
+
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 public class Buch extends Produkt{
@@ -15,7 +16,7 @@ public class Buch extends Produkt{
     @Override
     public String toString() {
         String produktString = super.toString();
-        return produktString + " Buch{" +
+        return produktString + " DataClasses.Buch{" +
                 "author='" + authors + '\'' +
                 ", seitenZahl=" + seitenZahl +
                 ", erscheinungsJahr=" + erscheinungsJahr +

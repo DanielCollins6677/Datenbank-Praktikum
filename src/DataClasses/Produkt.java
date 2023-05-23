@@ -1,3 +1,5 @@
+package DataClasses;
+
 public abstract class Produkt {
     private String prodNr;
     private String titel;
@@ -52,7 +54,7 @@ public abstract class Produkt {
 
     @Override
     public String toString() {
-        return "Produkt{" +
+        return "DataClasses.Produkt{" +
                 "prodNr='" + prodNr + '\'' +
                 ", titel='" + titel + '\'' +
                 ", rating=" + rating +

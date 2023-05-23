@@ -1,3 +1,5 @@
+package DataClasses;
+
 public class PreisZustand {
     private double preis;
     private String zustand;
@@ -20,7 +22,7 @@ public class PreisZustand {
 
     @Override
     public String toString() {
-        return "PreisZustand{" +
+        return "DataClasses.PreisZustand{" +
                 "preis=" + preis +
                 ", zustand='" + zustand + '\'' +
                 '}';

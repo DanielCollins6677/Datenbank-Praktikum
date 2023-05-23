@@ -1,3 +1,5 @@
+package DataClasses;
+
 public class DVDBeteiligt {
     private String name;
     private DVDBeteiligtenTitel titel;
@@ -25,7 +27,7 @@ public class DVDBeteiligt {
 
     @Override
     public String toString() {
-        return "DVDBeteiligt{" +
+        return "DataClasses.DVDBeteiligt{" +
                 "name='" + name + '\'' +
                 ", titel=" + titel +
                 '}';
