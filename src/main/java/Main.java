@@ -1,5 +1,4 @@
 import DataClasses.*;
-import Reader.*;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -81,13 +80,10 @@ public class Main {
         verlag.add("HBB");
         test.setVerlag(verlag);
 
-        CD test2 = new CD();
-
 
 
         try {
             db.addProdukt(test);
-            db.addProdukt(test2);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

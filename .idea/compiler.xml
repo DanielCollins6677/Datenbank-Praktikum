@@ -9,5 +9,8 @@
         <module name="DatabaseInputReader" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="DatabaseInputReader" target="17" />
+    </bytecodeTargetLevel>
   </component>
 </project>
