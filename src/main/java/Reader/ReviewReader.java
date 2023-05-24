@@ -2,12 +2,16 @@ package Reader;
 
 import DataClasses.Review;
 
+import java.io.File;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import static Reader.SimpleReader.readFile;
+
 public class ReviewReader {
-    public static List<Review> readReviews(List<String> reviewsString) {
+    public static List<Review> readReviews(File file) {
+        List<String> reviewsString = readFile(file);
         List<Review> result = new ArrayList<>();
 
         for(int i = 1; i < reviewsString.size();i++){
