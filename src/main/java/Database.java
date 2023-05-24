@@ -1,3 +1,4 @@
+import DataClasses.Buch;
 import DataClasses.Produkt;
 
 import java.sql.*;
@@ -30,11 +31,10 @@ public class Database {
 
             newProdukt.executeUpdate();
 
-            PreparedStatement newBook = db.prepareStatement(
-                    "INSERT INTO Buch (prodnr,seitenzahl,erscheinungsjahr,isbn) " +
-                            "VALUES (?,?,?,?)"
-            );
-
+            if(produkt instanceof Buch){
+                System.out.println("Ein neues Buch!");
+                addBuch((Buch) produkt);
+            }
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -43,4 +43,46 @@ public class Database {
         }
     }
 
+    private void addBuch(Buch buch) throws SQLException {
+        PreparedStatement newBook = db.prepareStatement(
+                "INSERT INTO Buch (prodnr,seitenzahl,erscheinungsjahr,isbn) " +
+                    "VALUES (?,?,?,?)"
+        );
+
+        //Parameter
+
+        newBook.setString(1, buch.getProdNr());
+        newBook.setInt(2, buch.getSeitenZahl());
+        newBook.setDate(3, Date.valueOf(buch.getErscheinungsJahr()));
+        newBook.setString(4, buch.getIsbn());
+
+
+        newBook.executeUpdate();
+
+        PreparedStatement buchAutor = db.prepareStatement(
+                "INSERT INTO buch_autor (prodnr,autor)" +
+                    "VALUES (?,?)"
+        );
+
+        buchAutor.setString(1, buch.getProdNr());
+
+        for(String autor : buch.getAuthors()){
+            buchAutor.setString(2,autor);
+            buchAutor.executeUpdate();
+        }
+
+        PreparedStatement buchVerlag = db.prepareStatement(
+                "INSERT INTO buch_verlag (prodnr,verlag)" +
+                        "VALUES (?,?)"
+        );
+
+        buchVerlag.setString(1, buch.getProdNr());
+
+        for(String verlag : buch.getVerlag()){
+            buchVerlag.setString(2,verlag);
+            buchVerlag.executeUpdate();
+        }
+
+
+    }
 }

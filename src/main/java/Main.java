@@ -5,6 +5,7 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.*;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.*;
 
 public class Main {
@@ -26,24 +27,21 @@ public class Main {
 
         try {
             //lese die Kategorien aus
-            List<Category> categories = CategoryReader.getCategories(new File(categoriesPath));
+            //List<Category> categories = CategoryReader.getCategories(new File(categoriesPath));
 
 
-            for(Category category : categories){
+            /*for(Category category : categories){
                 System.out.println(category);
-            }
+            }*/
 
             //Lese die Filialen aus
-            Filiale f1 = XMLReader.readFilialeXML(shopAndItemsPath);
+            //Filiale f1 = XMLReader.readFilialeXML(shopAndItemsPath);
             //Filiale f2 = XMLReader.readFilialeXML(leipzigTransformed);
 
 
-           /* System.out.printf("name: %s, straße: %s, plz: %s\n",f1.getName(),f1.getStraße(),f1.getPlz());
+            /*System.out.printf("name: %s, straße: %s, plz: %s\n",f1.getName(),f1.getStraße(),f1.getPlz());
             for (Produkt i: f1.getProduktPreis().keySet()){
-                if(i instanceof DVD){
-                    System.out.println(i);
-                    //System.out.println(f2.getProduktPreis().get(i));
-                }
+                System.out.println(i);
             }*/
 
             //Lese die Reviews aus
@@ -62,19 +60,36 @@ public class Main {
             System.out.println(abgelehnt.get(key) + "\n");
         }*/
 
-        /*Database db = new Database("localhost",5432,"dbpraktikum","postgres","1234");
+        Database db = new Database("localhost",5432,"dbpraktikum","postgres","1234");
 
         Buch test = new Buch();
         test.setProdNr("1");
         test.setTitel("test");
         test.setRating(4.45);
         test.setVerkaufsRank(1);
-        test.setBild("");*/
+        test.setBild("");
 
-        /*try {
-            //db.addProdukt(test);
+        test.setIsbn("1234");
+        test.setErscheinungsJahr(LocalDate.now());
+        test.setSeitenZahl(1);
+        List<String> autoren = new ArrayList<>();
+        autoren.add("Gustav");
+        autoren.add("Steven");
+        test.setAuthors(autoren);
+        List<String> verlag = new ArrayList<>();
+        verlag.add("Carlsen");
+        verlag.add("HBB");
+        test.setVerlag(verlag);
+
+        CD test2 = new CD();
+
+
+
+        try {
+            db.addProdukt(test);
+            db.addProdukt(test2);
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        }*/
+        }
     }
 }

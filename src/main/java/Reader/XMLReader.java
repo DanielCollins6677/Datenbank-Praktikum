@@ -86,19 +86,19 @@ public class XMLReader {
                                 if(buch.getAuthors().size() > 0 && buch.getVerlag() != null && buch.getSeitenZahl() != -1){
                                     bücher.add(buch);
                                 } else if(buch.getAuthors().size() == 0){
-                                    Ablehner.ablehnen(buch.getProdNr(),"DataClasses.Buch hat keine Authoren angegeben");
+                                    Ablehner.ablehnen(buch.getProdNr(),"Buch hat keine Authoren angegeben");
                                 } else if (buch.getVerlag() == null){
-                                    Ablehner.ablehnen(buch.getProdNr(),"DataClasses.Buch hat keinen Verlag angegeben");
+                                    Ablehner.ablehnen(buch.getProdNr(),"Buch hat keinen Verlag angegeben");
                                 } else if (buch.getSeitenZahl() == -1){
-                                    Ablehner.ablehnen(buch.getProdNr(),"DataClasses.Buch hat ungültigen Wert für Seitenanzahl");
+                                    Ablehner.ablehnen(buch.getProdNr(),"Buch hat ungültigen Wert für Seitenanzahl");
                                 }else {
-                                    throw new Exception("Fehler bei DataClasses.Buch Fallunterscheidung!");
+                                    throw new Exception("Fehler bei Buch Fallunterscheidung!");
                                 }
 
                                 //System.out.println(buch);
                             } catch (ClassCastException classCastException) {
                                 e1 = true;
-                                //System.out.println("kein DataClasses.Buch");
+                                //System.out.println("kein Buch");
                             } catch (Exception exception){
                                 exception.printStackTrace();
                             }
@@ -109,19 +109,19 @@ public class XMLReader {
                                 if(cd.getTracks().size() > 0 && cd.getKünstler().size() > 0 && cd.getErscheinungsdatum() != null){
                                     cds.add(cd);
                                 } else if (cd.getTracks().size() == 0){
-                                    Ablehner.ablehnen(cd.getProdNr(),"0 Lieder in der DataClasses.CD");
+                                    Ablehner.ablehnen(cd.getProdNr(),"0 Lieder in der CD");
                                 } else if(cd.getKünstler().size() == 0){
-                                    Ablehner.ablehnen(cd.getProdNr(),"0 DataClasses.Künstler für die DataClasses.CD");
+                                    Ablehner.ablehnen(cd.getProdNr(),"0 Künstler für die CD");
                                 } else if(cd.getErscheinungsdatum() == null){
-                                    Ablehner.ablehnen(cd.getProdNr(),"DataClasses.CD hat Fehler beim Erscheinungsdatum");
+                                    Ablehner.ablehnen(cd.getProdNr(),"CD hat Fehler beim Erscheinungsdatum");
                                 } else{
-                                    throw new Exception("Fehler bei DataClasses.CD Fallunterscheidung!");
+                                    throw new Exception("Fehler bei CD Fallunterscheidung!");
                                 }
                                 //System.out.println(cd);
 
                             } catch (ClassCastException classCastException) {
                                 e2 = true;
-                                //System.out.println("keine DataClasses.CD");
+                                //System.out.println("keine CD");
                             } catch (Exception exception){
                                 exception.printStackTrace();
                             }
@@ -132,19 +132,19 @@ public class XMLReader {
                                 if(!dvd.getFormat().equals("") && dvd.getLaufzeit() != -1 && dvd.getRegionCode() != -1){
                                     dvds.add(dvd);
                                 } else if(dvd.getFormat().equals("")){
-                                    Ablehner.ablehnen(dvd.getProdNr(),"DataClasses.DVD hat kein Format angegeben");
+                                    Ablehner.ablehnen(dvd.getProdNr(),"DVD hat kein Format angegeben");
                                 } else if(dvd.getLaufzeit() == -1){
-                                    Ablehner.ablehnen(dvd.getProdNr(),"DataClasses.DVD hat ungültige Laufzeit angegeben");
+                                    Ablehner.ablehnen(dvd.getProdNr(),"DVD hat ungültige Laufzeit angegeben");
                                 } else if(dvd.getRegionCode() == -1){
-                                    Ablehner.ablehnen(dvd.getProdNr(),"DataClasses.DVD hat ungültigen Regions code angegeben");
+                                    Ablehner.ablehnen(dvd.getProdNr(),"DVD hat ungültigen Regions code angegeben");
                                 } else {
-                                    throw new Exception("Fehler bei DataClasses.DVD Fallunterscheidung!");
+                                    throw new Exception("Fehler bei DVD Fallunterscheidung!");
                                 }
 
                                 //System.out.println(dvd);
                             } catch (ClassCastException classCastException) {
                                 e3 = true;
-                                //System.out.println("keine DataClasses.DVD");
+                                //System.out.println("keine DVD");
                             }catch (Exception exception){
                                 exception.printStackTrace();
                             }
@@ -172,21 +172,21 @@ public class XMLReader {
             if(!wiederverwendeteIds.contains(produkt.getProdNr())){
                 wiederverwendeteIds.add(produkt.getProdNr());
             } else {
-                Ablehner.ablehnen(produkt.getProdNr(),"DataClasses.Produkt verwendet vergebene ID");
+                Ablehner.ablehnen(produkt.getProdNr(),"Produkt verwendet vergebene ID");
             }
         }
         for(Produkt produkt : cds){
             if(!wiederverwendeteIds.contains(produkt.getProdNr())){
                 wiederverwendeteIds.add(produkt.getProdNr());
             }else {
-                Ablehner.ablehnen(produkt.getProdNr(),"DataClasses.Produkt verwendet vergebene ID");
+                Ablehner.ablehnen(produkt.getProdNr(),"Produkt verwendet vergebene ID");
             }
         }
         for(Produkt produkt : dvds){
             if(!wiederverwendeteIds.contains(produkt.getProdNr())){
                 wiederverwendeteIds.add(produkt.getProdNr());
             }else {
-                Ablehner.ablehnen(produkt.getProdNr(),"DataClasses.Produkt verwendet vergebene ID");
+                Ablehner.ablehnen(produkt.getProdNr(),"Produkt verwendet vergebene ID");
             }
         }
 
@@ -283,7 +283,7 @@ public class XMLReader {
             }
             return buch;
 
-        } else if(classification.equals("DataClasses.DVD")){
+        } else if(classification.equals("DVD")){
             DVD dvd = getDVDXML(itemDetails,laden,id,salesRank);
             if(item.hasAttribute("picture")){
                 dvd.setBild(item.getAttribute("picture"));
@@ -394,7 +394,7 @@ public class XMLReader {
                 //System.out.println(i + "\n");
             }
             if (i.getTitel() == null){
-                Ablehner.ablehnen(i.getProdNr(),"DataClasses.Produkt hat keinen Titel");
+                Ablehner.ablehnen(i.getProdNr(),"Produkt hat keinen Titel");
                 //System.out.println(i + "\n");
             }
             //Rating wird im nachher berechnet
@@ -411,23 +411,23 @@ public class XMLReader {
                 Buch buch = (Buch) i;
 
                 if(buch.getVerlag().isEmpty()){
-                    Ablehner.ablehnen(i.getProdNr(),"DataClasses.Buch hat keinen Verlag");
+                    Ablehner.ablehnen(i.getProdNr(),"Buch hat keinen Verlag");
                     //System.out.println(buch + "\n");
                 }
                 if(buch.getAuthors().isEmpty()){
-                    Ablehner.ablehnen(i.getProdNr(),"DataClasses.Buch hat keine Autoren");
+                    Ablehner.ablehnen(i.getProdNr(),"Buch hat keine Autoren");
                     //System.out.println(buch + "\n");
                 }
                 if(buch.getIsbn().equals("") || buch.getIsbn().equals("-1")){
-                    Ablehner.ablehnen(i.getProdNr(),"DataClasses.Buch hat keine oder eine ungültige ISBN");
+                    Ablehner.ablehnen(i.getProdNr(),"Buch hat keine oder eine ungültige ISBN");
                     //System.out.println(buch + "\n");
                 }
                 if(buch.getSeitenZahl() == 0 || buch.getSeitenZahl() == -1){
-                    Ablehner.ablehnen(i.getProdNr(),"DataClasses.Buch hat keine oder eine ungültige Seitenanzahl");
+                    Ablehner.ablehnen(i.getProdNr(),"Buch hat keine oder eine ungültige Seitenanzahl");
                     //System.out.println(buch + "\n");
                 }
                 if(buch.getErscheinungsJahr() == null || buch.getErscheinungsJahr().isAfter(LocalDate.now())){
-                    Ablehner.ablehnen(i.getProdNr(),"DataClasses.Buch hat kein oder ein ungültiges Erscheinungsdatum");
+                    Ablehner.ablehnen(i.getProdNr(),"Buch hat kein oder ein ungültiges Erscheinungsdatum");
                     //System.out.println(buch + "\n");
                 }
 
@@ -436,20 +436,20 @@ public class XMLReader {
                 CD cd = (CD) i;
 
                 if(cd.getKünstler().isEmpty()){
-                    Ablehner.ablehnen(i.getProdNr(),"DataClasses.CD hat keine DataClasses.Künstler");
+                    Ablehner.ablehnen(i.getProdNr(),"CD hat keine Künstler");
                     //System.out.println(cd + "\n");
                 }
                 if(cd.getLabels().isEmpty()){
-                    Ablehner.ablehnen(i.getProdNr(),"DataClasses.CD hat kein Label");
+                    Ablehner.ablehnen(i.getProdNr(),"CD hat kein Label");
                     //System.out.println(cd + "\n");
                 }
                 if(cd.getTracks().isEmpty()){
-                    Ablehner.ablehnen(i.getProdNr(),"DataClasses.CD hat keine Lieder");
+                    Ablehner.ablehnen(i.getProdNr(),"CD hat keine Lieder");
                     //System.out.println(cd + "\n");
                 }
                 //Kein Erscheinungsdatum oder ein Datum in der Zukunft
                 if(cd.getErscheinungsdatum() == null || cd.getErscheinungsdatum().isAfter(LocalDate.now())){
-                    Ablehner.ablehnen(i.getProdNr(),"DataClasses.CD hat kein oder ein ungültiges Erscheinungsdatum");
+                    Ablehner.ablehnen(i.getProdNr(),"CD hat kein oder ein ungültiges Erscheinungsdatum");
                     //System.out.println(cd + "\n");
                 }
 
@@ -458,19 +458,19 @@ public class XMLReader {
                 DVD dvd = (DVD) i;
 
                 if(dvd.getDvdBeteiligte().isEmpty()){
-                    Ablehner.ablehnen(i.getProdNr(),"DataClasses.DVD hat keine Beteiligten");
+                    Ablehner.ablehnen(i.getProdNr(),"DVD hat keine Beteiligten");
                     //System.out.println(dvd + "\n");
                 }
                 if(dvd.getLaufzeit() == 0 || dvd.getLaufzeit() < 0){
-                    Ablehner.ablehnen(i.getProdNr(),"DataClasses.DVD hat eine ungültige Laufzeit");
+                    Ablehner.ablehnen(i.getProdNr(),"DVD hat eine ungültige Laufzeit");
                     //System.out.println(dvd + "\n");
                 }
                 if(dvd.getFormat() == null || dvd.getFormat().equals("")){
-                    Ablehner.ablehnen(i.getProdNr(),"DataClasses.DVD hat ein ungültiges Format");
+                    Ablehner.ablehnen(i.getProdNr(),"DVD hat ein ungültiges Format");
                     //System.out.println(dvd + "\n");
                 }
                 if(dvd.getRegionCode() < 0){
-                    Ablehner.ablehnen(i.getProdNr(),"DataClasses.DVD hat ungültigen Region code");
+                    Ablehner.ablehnen(i.getProdNr(),"DVD hat ungültigen Region code");
                     //System.out.println(dvd + "\n");
                 }
             }
