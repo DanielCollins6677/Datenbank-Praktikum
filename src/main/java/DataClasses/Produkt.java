@@ -54,7 +54,7 @@ public abstract class Produkt {
 
     @Override
     public String toString() {
-        return "DataClasses.Produkt{" +
+        return "Produkt{" +
                 "prodNr='" + prodNr + '\'' +
                 ", titel='" + titel + '\'' +
                 ", rating=" + rating +

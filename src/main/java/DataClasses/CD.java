@@ -50,7 +50,7 @@ public class CD extends Produkt{
     @Override
     public String toString() {
         String produktString = super.toString();
-        return produktString + " DataClasses.CD{" +
+        return produktString + " CD{" +
                 "label='" + labels + '\'' +
                 ", erscheinungsdatum=" + erscheinungsdatum +
                 ", künstler=" + künstler +

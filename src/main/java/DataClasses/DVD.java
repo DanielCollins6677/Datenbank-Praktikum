@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DVD extends Produkt{
-    private String format;
+    private List<String> format = new ArrayList<>();
     private int laufzeit;
     private int regionCode;
     private List<DVDBeteiligt> dvdBeteiligte = new ArrayList<>();
@@ -12,11 +12,11 @@ public class DVD extends Produkt{
     public DVD() {
     }
 
-    public String getFormat() {
+    public List<String> getFormat() {
         return format;
     }
 
-    public void setFormat(String format) {
+    public void setFormat(List<String> format) {
         this.format = format;
     }
 
@@ -47,7 +47,7 @@ public class DVD extends Produkt{
     @Override
     public String toString() {
         String produktString = super.toString();
-        return produktString + " DataClasses.DVD{" +
+        return produktString + " DVD{" +
                 "format='" + format + '\'' +
                 ", laufzeit=" + laufzeit +
                 ", regionCode=" + regionCode +

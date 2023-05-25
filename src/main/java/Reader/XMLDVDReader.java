@@ -116,7 +116,15 @@ public class XMLDVDReader {
 
                 switch (dvdspecElement.getTagName()) {
                     case "format":
-                        result.setFormat(dvdspecElement.getTextContent());
+                        String formatTextContext = dvdspecElement.getTextContent();
+                        if(formatTextContext.contains(",")){
+                            String[] alleFormate = formatTextContext.split(",");
+                            for(String format : alleFormate){
+                                if(!format.equals("")){
+                                    result.getFormat().add(format.trim());
+                                }
+                            }
+                        }
                         break;
 
                     case "regioncode":

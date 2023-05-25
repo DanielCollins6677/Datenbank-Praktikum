@@ -35,14 +35,17 @@ public class Main {
             }*/
 
             //Lese die Filialen aus
-            //Filiale f1 = XMLReader.readFilialeXML(shopAndItemsPath);
-            //Filiale f2 = XMLReader.readFilialeXML(leipzigTransformed);
+            Filiale f1 = XMLReader.readFilialeXML(shopAndItemsPath);
+            Filiale f2 = XMLReader.readFilialeXML(leipzigTransformed);
 
 
-            /*System.out.printf("name: %s, straße: %s, plz: %s\n",f1.getName(),f1.getStraße(),f1.getPlz());
-            for (Produkt i: f1.getProduktPreis().keySet()){
-                System.out.println(i);
-            }*/
+            System.out.printf("name: %s, straße: %s, plz: %s\n",f2.getName(),f2.getStraße(),f2.getPlz());
+            for (Produkt i: f2.getProduktPreis().keySet()){
+                if(i instanceof DVD){
+                    if(((DVD) i).getFormat().size() > 1)
+                    System.out.println(i);
+                }
+            }
 
             //Lese die Reviews aus
             //List<Review> reviewList = ReviewReader.readReviews(new File(reviews));
@@ -84,12 +87,7 @@ public class Main {
         CD test2 = new CD();
 
 
-
-        try {
-            db.addProdukt(test);
-            db.addProdukt(test2);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        //db.addProdukt(test);
+        //db.addProdukt(test2);
     }
 }

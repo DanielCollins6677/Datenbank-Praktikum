@@ -16,7 +16,7 @@ public class Buch extends Produkt{
     @Override
     public String toString() {
         String produktString = super.toString();
-        return produktString + " DataClasses.Buch{" +
+        return produktString + " Buch{" +
                 "author='" + authors + '\'' +
                 ", seitenZahl=" + seitenZahl +
                 ", erscheinungsJahr=" + erscheinungsJahr +
