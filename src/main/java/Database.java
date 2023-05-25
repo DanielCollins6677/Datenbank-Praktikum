@@ -16,8 +16,34 @@ public class Database {
         }
     }
 
+    private boolean produktAlreadyInDatabase(Produkt produkt) throws SQLException {
+        PreparedStatement inDatenbank = db.prepareStatement(
+                "SELECT prodnr from produkt where prodnr = ?"
+        );
+
+        inDatenbank.setString(1,produkt.getProdNr());
+
+        ResultSet resultSet = inDatenbank.executeQuery();
+        boolean produktAlreadyInDatabase = false;
+        if(resultSet.next()){
+            produktAlreadyInDatabase = true;
+        }
+        resultSet.close();
+        inDatenbank.close();
+        return produktAlreadyInDatabase;
+    }
+
     public void addProdukt(Produkt produkt) throws SQLException {
+
+
         try {
+
+
+            if(produktAlreadyInDatabase(produkt)){
+                System.out.println(produkt.getProdNr() + " ist schon in der Datenbank");
+                return;
+            }
+
             db.setAutoCommit(false);
 
             PreparedStatement newProdukt = db.prepareStatement(

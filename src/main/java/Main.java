@@ -87,7 +87,12 @@ public class Main {
         CD test2 = new CD();
 
 
-        //db.addProdukt(test);
-        //db.addProdukt(test2);
+
+        try {
+            db.addProdukt(test);
+            db.addProdukt(test2);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
