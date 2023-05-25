@@ -4,6 +4,7 @@ import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.*;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.*;
@@ -24,6 +25,10 @@ public class Main {
         String leipzigTransformed = dataPath + "\\leipzig_transformed.xml";
         String reviews = dataPath + "\\reviews.csv";
 
+        //dresden
+        Filiale f1 = null;
+        //leipzig
+        Filiale f2 = null;
 
         try {
             //lese die Kategorien aus
@@ -35,17 +40,17 @@ public class Main {
             }*/
 
             //Lese die Filialen aus
-            Filiale f1 = XMLReader.readFilialeXML(shopAndItemsPath);
-            Filiale f2 = XMLReader.readFilialeXML(leipzigTransformed);
+            f1 = XMLReader.readFilialeXML(shopAndItemsPath);
+            f2 = XMLReader.readFilialeXML(leipzigTransformed);
 
 
-            System.out.printf("name: %s, straße: %s, plz: %s\n",f2.getName(),f2.getStraße(),f2.getPlz());
-            for (Produkt i: f2.getProduktPreis().keySet()){
+            //System.out.printf("name: %s, straße: %s, plz: %s\n",f2.getName(),f2.getStraße(),f2.getPlz());
+            /*for (Produkt i: f2.getProduktPreis().keySet()){
                 if(i instanceof DVD){
                     if(((DVD) i).getFormat().size() > 1)
                     System.out.println(i);
                 }
-            }
+            }*/
 
             //Lese die Reviews aus
             //List<Review> reviewList = ReviewReader.readReviews(new File(reviews));
@@ -64,35 +69,15 @@ public class Main {
         }*/
 
         Database db = new Database("localhost",5432,"dbpraktikum","postgres","1234");
-
-        Buch test = new Buch();
-        test.setProdNr("1");
-        test.setTitel("test");
-        test.setRating(4.45);
-        test.setVerkaufsRank(1);
-        test.setBild("");
-
-        test.setIsbn("1234");
-        test.setErscheinungsJahr(LocalDate.now());
-        test.setSeitenZahl(1);
-        List<String> autoren = new ArrayList<>();
-        autoren.add("Gustav");
-        autoren.add("Steven");
-        test.setAuthors(autoren);
-        List<String> verlag = new ArrayList<>();
-        verlag.add("Carlsen");
-        verlag.add("HBB");
-        test.setVerlag(verlag);
-
-        CD test2 = new CD();
-
-
+        db.clearDB();
 
         try {
-            db.addProdukt(test);
-            db.addProdukt(test2);
+            db.addFiliale(f1);
+            db.addFiliale(f2);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+        //db.testAddFilialeDB();
     }
+
 }
