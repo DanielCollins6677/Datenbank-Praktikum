@@ -33,6 +33,43 @@ public class Database {
         return produktAlreadyInDatabase;
     }
 
+    private void addFiliale(Filiale filiale) throws SQLException {
+        PreparedStatement newFiliale = db.prepareStatement(
+                "INSERT INTO Filiale (name,plz,straße) " +
+                        "VALUES (?,?,?)"
+        );
+
+        //Parameter
+
+        newFiliale.setString(1, filiale.getName());
+        newFiliale.setInt(2, filiale.getPlz());
+        newFiliale.setString(3, filiale.getStraße());
+        newFiliale.executeUpdate();
+
+        PreparedStatement filialeAngebot = db.prepareStatement(
+                "INSERT INTO filiale_Angebot (fname, prodnr,preis,zustand)" +
+                        "VALUES (?,?,?,?)"
+        );
+
+        filialeAngebot.setString(1, filiale.getName());
+
+
+        Map<Produkt, List<PreisZustand>> produktPreis = filiale.getProduktPreis();
+        for(Produkt prod : produktPreis.keySet()){
+
+            //Add Produkt into Database
+            addProdukt(prod);
+
+            List<PreisZustand> produktAngebote = produktPreis.get(prod);
+            for(PreisZustand einzelnesProduktAngebot : produktAngebote) {
+                filialeAngebot.setString(2, prod.getProdNr());
+                filialeAngebot.setDouble(3,einzelnesProduktAngebot.getPreis());
+                filialeAngebot.setString(4,einzelnesProduktAngebot.getZustand());
+                filialeAngebot.executeUpdate();
+            }
+        }
+    }
+
     public void addProdukt(Produkt produkt) throws SQLException {
 
 
@@ -59,8 +96,12 @@ public class Database {
             newProdukt.executeUpdate();
 
             if(produkt instanceof Buch){
-                System.out.println("Ein neues Buch!");
+                //System.out.println("Ein neues Buch!");
                 addBuch((Buch) produkt);
+            } else if(produkt instanceof CD){
+                addCD((CD) produkt);
+            } else if(produkt instanceof DVD){
+                addDVD((DVD) produkt);
             }
 
         } catch (SQLException e) {
@@ -69,7 +110,6 @@ public class Database {
             db.setAutoCommit(true);
         }
     }
-
     private void addBuch(Buch buch) throws SQLException {
         PreparedStatement newBook = db.prepareStatement(
                 "INSERT INTO Buch (prodnr,seitenzahl,erscheinungsjahr,isbn) " +
@@ -112,7 +152,7 @@ public class Database {
 
         // JDBC Erweiterung
     }
-        private void addCD(CD cd) throws SQLException {
+    private void addCD(CD cd) throws SQLException {
             PreparedStatement newCD = db.prepareStatement(
                     "INSERT INTO CD (prodnr,erscheinungsdatum) " +
                             "VALUES (?,?)"
@@ -163,85 +203,50 @@ public class Database {
             }
 
         }
+    private void addDVD(DVD dvd) throws SQLException {
+        PreparedStatement newDVD = db.prepareStatement(
+                "INSERT INTO DVD (prodnr,laufzeit,regioncode) " +
+                        "VALUES (?,?,?)"
+        );
 
-        private void addDVD(DVD dvd) throws SQLException {
-            PreparedStatement newDVD = db.prepareStatement(
-                    "INSERT INTO DVD (prodnr,laufzeit,regioncode) " +
-                            "VALUES (?,?,?)"
-            );
+        //Parameter
 
-            //Parameter
-
-            newDVD.setString(1, dvd.getProdNr());
-            newDVD.setInt(2, dvd.getLaufzeit());
-            newDVD.setInt(3, dvd.getRegionCode());
-
-
-            newDVD.executeUpdate();
+        newDVD.setString(1, dvd.getProdNr());
+        newDVD.setInt(2, dvd.getLaufzeit());
+        newDVD.setInt(3, dvd.getRegionCode());
 
 
-            //newDVD.setString(2, dvd.getFormat());
-
-            PreparedStatement dvdFormat = db.prepareStatement(
-                    "INSERT INTO dvd_format (prodnr,format)" +
-                            "VALUES (?,?)"
-            );
-            dvdFormat.setString(1,dvd.getProdNr());
-
-            for(String format : dvd.getFormat()){
-                dvdFormat.setString(2,format);
-                dvdFormat.executeUpdate();
-            }
+        newDVD.executeUpdate();
 
 
-            PreparedStatement dvdBeteiligt = db.prepareStatement(
-                    "INSERT INTO dvd_beteiligt (prodnr,name,titel)" +
-                            "VALUES (?,?,?)"
-            );
+        //newDVD.setString(2, dvd.getFormat());
 
-            dvdBeteiligt.setString(1, dvd.getProdNr());
+        PreparedStatement dvdFormat = db.prepareStatement(
+                "INSERT INTO dvd_format (prodnr,format)" +
+                        "VALUES (?,?)"
+        );
+        dvdFormat.setString(1,dvd.getProdNr());
 
-            for(DVDBeteiligt beteiligt : dvd.getDvdBeteiligte()){
-                dvdBeteiligt.setString(2,beteiligt.getName());
-                dvdBeteiligt.setString(3,beteiligt.getTitel().toString());
-                dvdBeteiligt.executeUpdate();
-            }
+        for(String format : dvd.getFormat()){
+            dvdFormat.setString(2,format);
+            dvdFormat.executeUpdate();
         }
 
-        private void addFiliale(Filiale filiale) throws SQLException {
-            PreparedStatement newFiliale = db.prepareStatement(
-                    "INSERT INTO Filiale (name,plz,straße) " +
-                            "VALUES (?,?,?)"
-            );
 
-            //Parameter
+        PreparedStatement dvdBeteiligt = db.prepareStatement(
+                "INSERT INTO dvd_beteiligt (prodnr,name,titel)" +
+                        "VALUES (?,?,?)"
+        );
 
-            newFiliale.setString(1, filiale.getName());
-            newFiliale.setInt(2, filiale.getPlz());
-            newFiliale.setString(3, filiale.getStraße());
-            newFiliale.executeUpdate();
+        dvdBeteiligt.setString(1, dvd.getProdNr());
 
-            PreparedStatement filialeAngebot = db.prepareStatement(
-                    "INSERT INTO filiale_Angebot (fname, prodnr,preis,zustand)" +
-                            "VALUES (?,?,?,?)"
-            );
-
-            filialeAngebot.setString(1, filiale.getName());
-
-
-            Map<Produkt, List<PreisZustand>> produktPreis = filiale.getProduktPreis();
-            for(Produkt prod : produktPreis.keySet()){
-                List<PreisZustand> produktAngebote = produktPreis.get(prod);
-                for(PreisZustand einzelnesProduktAngebot : produktAngebote) {
-                    filialeAngebot.setString(2, prod.getProdNr());
-                    filialeAngebot.setDouble(3,einzelnesProduktAngebot.getPreis());
-                    filialeAngebot.setString(4,einzelnesProduktAngebot.getZustand());
-                    filialeAngebot.executeUpdate();
-                }
-            }
+        for(DVDBeteiligt beteiligt : dvd.getDvdBeteiligte()){
+            dvdBeteiligt.setString(2,beteiligt.getName());
+            dvdBeteiligt.setString(3,beteiligt.getTitel().toString());
+            dvdBeteiligt.executeUpdate();
         }
-
-        private void addKategorie(List<Category> categories) throws SQLException {
+    }
+    private void addCategories(List<Category> categories) throws SQLException {
             PreparedStatement newKategorie = db.prepareStatement(
                     "INSERT INTO Kategorie (name) " +
                             "VALUES (?)"
