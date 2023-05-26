@@ -63,7 +63,6 @@ CREATE TABLE DVD_Format (
 CREATE TABLE Filiale (
 	Name VARCHAR (30) NOT NULL,
        PLZ int,
-       Hausnummer INT,
        Straﬂe VARCHAR (50),
        PRIMARY KEY (Name));
 CREATE TABLE Filiale_Angebot (
