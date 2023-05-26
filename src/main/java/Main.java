@@ -70,13 +70,14 @@ public class Main {
 
         Database db = new Database("localhost",5432,"dbpraktikum","postgres","1234");
         db.clearDB();
+        db.testAddFilialeDB();
 
-        try {
+       /* try {
             db.addFiliale(f1);
             db.addFiliale(f2);
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        }
+        }*/
         //db.testAddFilialeDB();
     }
 

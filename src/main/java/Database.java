@@ -502,10 +502,10 @@ public class Database {
 
             test4.setLaufzeit(1);
             test4.setRegionCode(1);
-            List<String> autoren = new ArrayList<>();
-            autoren.add("autor1");
-            autoren.add("autor2");
-            test4.setFormat(autoren);
+            List<String> formate = new ArrayList<>();
+            formate.add("format1");
+            formate.add("format2");
+            test4.setFormat(formate);
             List<DVDBeteiligt> beteiligte = new ArrayList<>();
             beteiligte.add(new DVDBeteiligt("beteiligter1",DVDBeteiligtenTitel.Actor));
             beteiligte.add(new DVDBeteiligt("beteiligter2",DVDBeteiligtenTitel.Creator));
@@ -543,7 +543,7 @@ public class Database {
             e.printStackTrace();
         }
     }
-    
+
         /*private void addKunde(Kunde kunde) throws SQLException {
             PreparedStatement newKunde = db.prepareStatement(
                     "INSERT INTO Kunde (name) " +

@@ -53,8 +53,13 @@ CREATE TABLE DVD_Beteiligt (
 	ProdNr varchar(30) NOT NULL,
 	Name VARCHAR (30) NOT NULL,
        Titel VARCHAR (30) NOT NULL,
-       PRIMARY KEY (ProdNr, Name),
+       PRIMARY KEY (ProdNr, Name,Titel),
        FOREIGN KEY (ProdNr) REFERENCES DVD);
+CREATE TABLE DVD_Format (
+    Prodnr (varchar 30) NOT NULL,
+    Format (varhar 30) NOT NULL,
+    Primary Key (Prodnr,Format),
+    Foreign Key (Prodnr) References DVD);
 CREATE TABLE Filiale (
 	Name VARCHAR (30) NOT NULL,
        PLZ int,
