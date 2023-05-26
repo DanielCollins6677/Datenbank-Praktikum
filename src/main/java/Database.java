@@ -251,7 +251,7 @@ public class Database {
 
                 cdKünstler.setString(2,name);
                 cdKünstler.executeUpdate();
-                if((name).length() > 30) System.err.print("Name zu groß");
+                if((name).length() > 50) System.err.print("Name zu groß");
             }
 
             cdLabel.setString(1, cd.getProdNr());
