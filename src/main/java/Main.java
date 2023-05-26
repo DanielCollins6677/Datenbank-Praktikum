@@ -18,12 +18,12 @@ public class Main {
 
         String basePath = new File("").getAbsolutePath();
 
-        String dataPath = basePath + "\\src\\main\\java\\dbpraktikum-mediastore-master\\data";
+        String dataPath = basePath + "/src/main/java/dbpraktikum-mediastore-master/data";
 
-        String categoriesPath = dataPath + "\\categories.xml";
-        String shopAndItemsPath = dataPath + "\\dresden.xml";
-        String leipzigTransformed = dataPath + "\\leipzig_transformed.xml";
-        String reviews = dataPath + "\\reviews.csv";
+        String categoriesPath = dataPath + "/categories.xml";
+        String shopAndItemsPath = dataPath + "/dresden.xml";
+        String leipzigTransformed = dataPath + "/leipzig_transformed.xml";
+        String reviews = dataPath + "/reviews.csv";
 
         //dresden
         Filiale f1 = null;
@@ -68,16 +68,20 @@ public class Main {
             System.out.println(abgelehnt.get(key) + "\n");
         }*/
 
-        Database db = new Database("localhost",5432,"dbpraktikum","postgres","1234");
+        Database db = new Database("localhost",5432,"postgres","postgres","DBPraktikum#2023");
         db.clearDB();
-
+        db.testAddFilialeDB();
+/*
         try {
             db.addFiliale(f1);
             db.addFiliale(f2);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        //db.testAddFilialeDB();
+
+
+ */
     }
+
 
 }
