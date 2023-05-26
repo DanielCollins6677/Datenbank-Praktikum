@@ -1,3 +1,5 @@
+import DataClasses.Filiale;
+import DataClasses.Produkt;
 import DataClasses.Review;
 
 import java.util.ArrayList;
@@ -24,8 +26,25 @@ public class ReviewLogik {
             tempRatingSum += i;
         }
 
-        return ((double) tempRatingSum) / length;
+        double rating = ((double) tempRatingSum) / length;
+
+        //rating auf 2. Nachkommastelle runden
+        rating = ( (double) Math.round( rating*100) ) / 100;
+
+        return rating;
     }
+
+    public static void setProductRatings(Filiale filiale, List<Review> reviews){
+        for(Produkt prod : filiale.getProduktPreis().keySet()){
+            double prodRating = ReviewLogik.calculateRating(reviews, prod.getProdNr());
+            if(prodRating < 0 || prodRating > 5){
+                prod.setRating(-1);
+            } else {
+                prod.setRating(prodRating);
+            }
+        }
+    }
+
 
     public static void calculateRatingTest(){
         List<Review> testReviews1 = new ArrayList<>();

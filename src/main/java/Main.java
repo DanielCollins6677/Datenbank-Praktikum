@@ -38,19 +38,23 @@ public class Main {
             }*/
 
             //Lese die Filialen aus
-            /*Filiale f1 = XMLReader.readFilialeXML(shopAndItemsPath);
+            Filiale f1 = XMLReader.readFilialeXML(shopAndItemsPath);
             Filiale f2 = XMLReader.readFilialeXML(leipzigTransformed);
 
 
-            System.out.printf("name: %s, straße: %s, plz: %s\n",f1.getName(),f1.getStraße(),f1.getPlz());
+            /*System.out.printf("name: %s, straße: %s, plz: %s\n",f1.getName(),f1.getStraße(),f1.getPlz());
             for (Produkt i: f1.getProduktPreis().keySet()){
                 System.out.println(i);
             }*/
 
             //Lese die Reviews aus
-            /*reviewList = ReviewReader.readReviews(new File(reviews));
+            reviewList = ReviewReader.readReviews(new File(reviews));
 
-            for (Review review : reviewList) {
+            ReviewLogik.setProductRatings(f1,reviewList);
+            ReviewLogik.setProductRatings(f2,reviewList);
+
+
+            /*for (Review review : reviewList) {
                 System.out.println(review);
             }*/
 
@@ -60,7 +64,8 @@ public class Main {
 
         Database db = new Database("localhost",5432,"dbpraktikum","postgres","1234");
 
-        ReviewLogik.calculateRatingTest();
+        //ReviewLogik.calculateRatingTest();
+
 
 
         /*try {
