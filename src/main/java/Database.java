@@ -1,11 +1,10 @@
 import DataClasses.*;
 
 import java.sql.*;
+import java.sql.Date;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
 
 public class Database {
     private Connection db;
@@ -49,6 +48,7 @@ public class Database {
             )
         ){
             inDatenbank.setString(1,produkt.getProdNr());
+            if(produkt.getProdNr().length() > 30) System.err.print("ProdNr zu groß");
 
             ResultSet resultSet = inDatenbank.executeQuery();
             boolean produktAlreadyInDatabase = false;
@@ -84,6 +84,8 @@ public class Database {
 
             //Parameter
 
+            if(filiale.getName().length() > 30) System.err.print("Name zu groß");
+            if(filiale.getStraße().length() > 50) System.err.print("Straße zu groß");
             newFiliale.setString(1, filiale.getName());
             newFiliale.setInt(2, filiale.getPlz());
             newFiliale.setString(3, filiale.getStraße());
@@ -91,6 +93,7 @@ public class Database {
 
 
             filialeAngebot.setString(1, filiale.getName());
+            if(filiale.getName().length() > 50) System.err.print("FName zu groß");
 
 
             Map<Produkt, List<PreisZustand>> produktPreis = filiale.getProduktPreis();
@@ -105,6 +108,8 @@ public class Database {
                     filialeAngebot.setDouble(3,einzelnesProduktAngebot.getPreis());
                     filialeAngebot.setString(4,einzelnesProduktAngebot.getZustand());
                     filialeAngebot.executeUpdate();
+                    if((prod.getProdNr()).length() > 30) System.err.print("ProdNr zu groß");
+                    if(einzelnesProduktAngebot.getZustand().length() > 30) System.err.print("Produkt Angebot zu groß");
                 }
             }
 
@@ -130,6 +135,8 @@ public class Database {
 
             if(db.getAutoCommit()) db.setAutoCommit(false);
 
+            if(produkt.getProdNr().length() > 30) System.err.print("ProdNr zu groß");
+            if(produkt.getTitel().length() > 255) System.err.print("Titel zu groß");
             newProdukt.setString(1, produkt.getProdNr());
             newProdukt.setString(2, produkt.getTitel());
             newProdukt.setDouble(3,produkt.getRating());
@@ -172,6 +179,7 @@ public class Database {
 
             //Parameter
 
+            if(buch.getProdNr().length() > 30) System.err.print("ProdNr zu groß");
             newBook.setString(1, buch.getProdNr());
             newBook.setInt(2, buch.getSeitenZahl());
             newBook.setDate(3, Date.valueOf(buch.getErscheinungsJahr()));
@@ -186,6 +194,7 @@ public class Database {
             for (String autor : buch.getAuthors()) {
                 buchAutor.setString(2, autor);
                 buchAutor.executeUpdate();
+                if((autor).length() > 30) System.err.print("Autor zu groß");
             }
 
 
@@ -194,6 +203,7 @@ public class Database {
             for (String verlag : buch.getVerlag()) {
                 buchVerlag.setString(2, verlag);
                 buchVerlag.executeUpdate();
+                if((verlag).length() > 30) System.err.print("Verlag zu groß");
             }
 
             // JDBC Erweiterung
@@ -224,6 +234,7 @@ public class Database {
 
             //Parameter
 
+            if(cd.getProdNr().length() > 30) System.err.print("ProdNr zu groß");
             newCD.setString(1, cd.getProdNr());
             newCD.setDate(2, Date.valueOf(cd.getErscheinungsdatum()));
 
@@ -232,27 +243,36 @@ public class Database {
 
 
             cdKünstler.setString(1, cd.getProdNr());
+            if(cd.getProdNr().length() > 30) System.err.print("Name zu groß");
 
+
+            //cdKünstler.setString(2, ...)
             for(String name : cd.getKünstler()){
+
                 cdKünstler.setString(2,name);
                 cdKünstler.executeUpdate();
+                if((name).length() > 30) System.err.print("Name zu groß");
             }
 
-
             cdLabel.setString(1, cd.getProdNr());
+            if(cd.getProdNr().length() > 30) System.err.print("ProdNr zu groß");
 
 
             for(String label : cd.getLabels()){
                 cdLabel.setString(2,label);
                 cdLabel.executeUpdate();
+                if(label.length() > 100) System.err.print("Label zu groß");
+
             }
 
 
             cdWerke.setString(1, cd.getProdNr());
+            if(cd.getProdNr().length() > 30) System.err.print("ProdNr zu groß");
 
             for(String titel : cd.getTracks()){
                 cdWerke.setString(2,titel);
                 cdWerke.executeUpdate();
+                if(titel.length() > 255) System.err.print("Titel zu groß");
             }
 
         }catch (SQLException e) {
@@ -281,6 +301,7 @@ public class Database {
 
             //Parameter
 
+            if(dvd.getProdNr().length() > 30) System.err.print("ProdNr zu groß");
             newDVD.setString(1, dvd.getProdNr());
             newDVD.setInt(2, dvd.getLaufzeit());
             newDVD.setInt(3, dvd.getRegionCode());
@@ -290,19 +311,24 @@ public class Database {
 
 
             dvdFormat.setString(1,dvd.getProdNr());
+            if(dvd.getProdNr().length() > 30) System.err.print("ProdNr zu groß");
 
             for(String format : dvd.getFormat()){
                 dvdFormat.setString(2,format);
                 dvdFormat.executeUpdate();
+                if((format).length() > 50) System.err.print("Format zu groß");
             }
 
 
             dvdBeteiligt.setString(1, dvd.getProdNr());
+            if(dvd.getProdNr().length() > 30) System.err.print("ProdNr zu groß");
 
             for(DVDBeteiligt beteiligt : dvd.getDvdBeteiligte()){
                 dvdBeteiligt.setString(2,beteiligt.getName());
                 dvdBeteiligt.setString(3,beteiligt.getTitel().toString());
                 dvdBeteiligt.executeUpdate();
+                if(beteiligt.getName().length() > 30) System.err.print("Name zu groß");
+                if(beteiligt.getTitel().toString().length() > 255) System.err.print("Titel zu groß");
             }
 
         }catch (SQLException e) {
@@ -326,12 +352,15 @@ public class Database {
 
             for(Category category : categories) {
                 newKategorie.setString(1, category.getName());
+                if(category.getName().length() > 30) System.err.print("Name zu groß");
 
                 newKategorie.executeUpdate();
 
                 kategorieOrdnung.setString(1, category.getParentCategory());
                 kategorieOrdnung.setString(2, category.getName());
                 kategorieOrdnung.executeUpdate();
+                if(category.getParentCategory().length() > 30) System.err.print("Oberkategorie zu groß");
+                if(category.getName().length() > 30) System.err.print("Unterkategorie zu groß");
             }
 
         }catch (SQLException e) {
@@ -483,7 +512,7 @@ public class Database {
             künstler.add("k1");
             künstler.add("k2");
             test3.setKünstler(künstler);
-            List<String> label = new ArrayList<>();
+            Set<String> label = new HashSet<>();
             label.add("label1");
             label.add("label2");
             test3.setLabels(label);
@@ -502,10 +531,10 @@ public class Database {
 
             test4.setLaufzeit(1);
             test4.setRegionCode(1);
-            List<String> autoren = new ArrayList<>();
-            autoren.add("autor1");
-            autoren.add("autor2");
-            test4.setFormat(autoren);
+            List<String> formate = new ArrayList<>();
+            formate.add("format1");
+            formate.add("format2");
+            test4.setFormat(formate);
             List<DVDBeteiligt> beteiligte = new ArrayList<>();
             beteiligte.add(new DVDBeteiligt("beteiligter1",DVDBeteiligtenTitel.Actor));
             beteiligte.add(new DVDBeteiligt("beteiligter2",DVDBeteiligtenTitel.Creator));
