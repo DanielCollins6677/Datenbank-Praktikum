@@ -25,9 +25,10 @@ public class Main {
         String reviews = dataPath + "\\reviews.csv";
 
         List<Category> categories = new ArrayList<>();
+        List<Review> reviewList = new ArrayList<>();
         try {
             //lese die Kategorien aus
-            categories = CategoryReader.readCategories(new File(categoriesPath));
+            //categories = CategoryReader.readCategories(new File(categoriesPath));
 
 
             /*for(Category category : categories){
@@ -47,28 +48,26 @@ public class Main {
             }*/
 
             //Lese die Reviews aus
-            //List<Review> reviewList = ReviewReader.readReviews(new File(reviews));
+            /*reviewList = ReviewReader.readReviews(new File(reviews));
 
-        /*for (DataClasses.Review review : reviewList) {
-            System.out.println(review);
-        }*/
+            for (Review review : reviewList) {
+                System.out.println(review);
+            }*/
 
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        /*for(String key : abgelehnt.keySet()){
-            System.out.println(key + " wurde abgelehnt wegen:");
-            System.out.println(abgelehnt.get(key) + "\n");
-        }*/
-
         Database db = new Database("localhost",5432,"dbpraktikum","postgres","1234");
 
-        try {
+        ReviewLogik.calculateRatingTest();
+
+
+        /*try {
             db.addKategorien(categories);
         } catch (Exception e) {
             throw new RuntimeException(e);
-        }
+        }*/
 
     }
 }
