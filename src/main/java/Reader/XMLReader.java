@@ -38,19 +38,7 @@ public class XMLReader {
 
         File inputFile = new File(filePath);
 
-
-        //get documentBuilder
-        DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-
-        //get the document
-        Document doc = dBuilder.parse(inputFile);
-
-        //normalize the xml structure
-        doc.getDocumentElement().normalize();
-
-        //get
-        NodeList nodeList = doc.getElementsByTagName("shop");
+        NodeList nodeList = nodeListFromFile(inputFile,"shop");
 
         Filiale laden = new Filiale();
 
@@ -256,6 +244,21 @@ public class XMLReader {
         System.out.println("Laden konnte gelesen werden");
 
         return laden;
+    }
+
+    public static NodeList nodeListFromFile(File inputFile, String tagName) throws ParserConfigurationException, IOException, SAXException {
+        //get documentBuilder
+        DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+
+        //get the document
+        Document doc = dBuilder.parse(inputFile);
+
+        //normalize the xml structure
+        doc.getDocumentElement().normalize();
+
+        //get
+        return doc.getElementsByTagName(tagName);
     }
 
     private static Produkt getProduktXML(Element item, Filiale laden) throws IllegalArgumentException{

@@ -1,92 +1,73 @@
 package Reader;
 
 import DataClasses.Category;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Stack;
 
 public class CategoryReader {
 
-    public static List<Category> getCategories(File file) {
-        List<String> input = SimpleReader.readFile(file);
+    public static List<Category> readCategories(File file) {
         List<Category> res = new ArrayList<>();
-        Category category = new Category();
-        Stack<String> parentCategory = new Stack<>();
-        parentCategory.push("");
-        //int counter = 0;
-        for (String i : input) {
-            //counter++;
-            while (!i.isBlank()) {
-                //System.out.println(i);
-                if (i.contains("<category>")) {
-                    //does it have a parent DataClasses.Category?
-                    if (!parentCategory.peek().equals("")) {
-                        category.setParentCategory(parentCategory.peek());
-                    }
-                    //using a StringBuilder to remove the <category> from the String
-                    StringBuilder sb = new StringBuilder(i);
-                    sb.delete(0, 10);
-                    //replace all &amp; with &
-                    while (sb.indexOf("&amp;") != -1) {
-                        sb.replace(sb.indexOf("&amp;"), sb.indexOf("&amp;") + 5, "&");
-                    }
-                    //set the name
-                    int endOfName = sb.indexOf("<");
-                    String name = "";
-                    if (endOfName == -1) {
-                        name = sb.toString();
-                        sb.delete(0, sb.length());
-                    } else {
-                        name = sb.substring(0, endOfName);
-                        sb.delete(0, endOfName);
+        try {
+            NodeList nodeList = XMLReader.nodeListFromFile(file,"categories");
+            Node categoriesNode = nodeList.item(0);
 
-                        //System.out.println(category);
-                    }
-                    category.setName(name);
-                    parentCategory.push(name);
-                    i = sb.toString();
+            NodeList categoriesSubNodeList = categoriesNode.getChildNodes();
+
+            for (int i = 0; i < categoriesSubNodeList.getLength(); i++) {
+                Node node = categoriesSubNodeList.item(i);
+                if (node.getNodeType() == Node.ELEMENT_NODE) {
+                    Element element = (Element) node;
+                    String name = getCategoryName(element);
+                    //System.out.println(name);
+
+                    res.addAll(recursiveCategory(null,name,element.getChildNodes()));
+                }
+            }
 
 
-                    //System.out.println(i);
-                    //System.out.println(sb.indexOf("<"));
-                } else if (i.contains("<item>")) {
-                    StringBuilder sb = new StringBuilder(i);
-                    sb.delete(0, 6);
-                    int indexEndItem = sb.indexOf("</item>");
-                    sb.delete(indexEndItem, indexEndItem + 7);
-                    int endOfName = sb.indexOf("<");
-                    String name = "";
-                    if (endOfName == -1) {
-                        name = sb.toString();
-                        sb.delete(0, sb.length());
-                    } else {
-                        name = sb.substring(0, endOfName);
-                        sb.delete(0, endOfName);
-                    }
+        } catch (Exception e){
+            System.err.println("Kategorien konnten nicht eingelesen werden");
+            e.printStackTrace();
+        }
 
-                    category.getItems().add(name);
-                    i = sb.toString();
-                    //System.out.println(category.getItems());
-                    //System.out.println(i);
-                } else if (i.contains("</category>")) {
-                    //System.out.println(counter);
-                    StringBuilder sb = new StringBuilder(i);
-                    int indexCategory = sb.indexOf("</category>");
-                    sb.delete(indexCategory, indexCategory + 11);
-                    i = sb.toString();
-                    res.add(category);
-                    String nextCategoryName = parentCategory.pop();
-                    category = new Category(parentCategory.peek(), nextCategoryName, new ArrayList<>());
+        return res;
+    }
 
-                    //System.out.println(parentCategory.pop() + " " + counter);
+    private static String getCategoryName(Element element) {
+        String temp = element.getTextContent();
+        int indexLineBreak = temp.length();
+        if(temp.contains("\n")) {
+            indexLineBreak = temp.indexOf("\n");
+        }
+        return temp.substring(0,indexLineBreak);
+    }
 
-                } else {
-                    break;
+    private static List<Category> recursiveCategory(String parent, String name,NodeList categoryNodes){
+        List<Category> res = new ArrayList<>();
+        List<String> items = new ArrayList<>();
+
+        for (int i = 0; i < categoryNodes.getLength(); i++) {
+            Node node = categoryNodes.item(i);
+            if (node.getNodeType() == Node.ELEMENT_NODE) {
+                Element element = (Element) node;
+                switch (element.getTagName()){
+                    case "category":
+                        String child =  getCategoryName(element);
+                        res.addAll(recursiveCategory(name,child,element.getChildNodes()));
+                        break;
+                    case "item":
+                        items.add(getCategoryName(element));
                 }
             }
         }
+
+        res.add(new Category(parent, name, items));
         return res;
     }
 

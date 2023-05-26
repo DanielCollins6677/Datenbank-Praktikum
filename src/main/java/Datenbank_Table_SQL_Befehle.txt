@@ -27,7 +27,7 @@ CREATE TABLE CD (
        Erscheinungsdatum Date NOT NULL,
        PRIMARY KEY (ProdNr),
        FOREIGN KEY (ProdNr) REFERENCES Produkt );
-CREATE TABLE CD_Künstler (				
+CREATE TABLE CD_Kï¿½nstler (				
 	ProdNr varchar(30) NOT NULL,
 	Name VARCHAR (30) NOT NULL,
        PRIMARY KEY (ProdNr, Name),
@@ -59,7 +59,7 @@ CREATE TABLE Filiale (
 	Name VARCHAR (30) NOT NULL,
        PLZ int,
        Hausnummer INT,
-       Straße VARCHAR (50),
+       Straï¿½e VARCHAR (50),
        PRIMARY KEY (Name));
 CREATE TABLE Filiale_Angebot (
 	FName VARCHAR (50) NOT NULL,
@@ -70,10 +70,10 @@ CREATE TABLE Filiale_Angebot (
        FOREIGN KEY (ProdNr) REFERENCES Produkt,
        FOREIGN KEY (FName) REFERENCES Filiale);
 CREATE TABLE Kategorie (
-       Name VARCHAR (30) NOT NULL PRIMARY KEY);
+       Name VARCHAR (80) NOT NULL PRIMARY KEY);
 CREATE TABLE Kategorie_Ordnung(
-       Oberkategorie VARCHAR (30) NOT NULL,
-       Unterkategorie VARCHAR (30) NOT NULL,
+       Oberkategorie VARCHAR (80) NOT NULL,
+       Unterkategorie VARCHAR (80) NOT NULL,
        PRIMARY KEY (Oberkategorie, Unterkategorie),
        FOREIGN KEY (Oberkategorie) REFERENCES Kategorie,
        FOREIGN KEY (Unterkategorie) REFERENCES Kategorie);
@@ -93,11 +93,11 @@ CREATE TABLE Kunde_Konto (
 	Foreign Key(Name) References Kunde);
 CREATE TABLE Produkt_Kategorie (
 	ProdNr varchar(30) NOT NULL,
-       Kat_Name VARCHAR (30) NOT NULL,
+       Kat_Name VARCHAR (80) NOT NULL,
        PRIMARY KEY (ProdNr, Kat_name),
        FOREIGN KEY (ProdNr) REFERENCES Produkt,
        FOREIGN KEY (Kat_Name) REFERENCES Kategorie);
-CREATE TABLE Produkt_ähnlich(
+CREATE TABLE Produkt_ï¿½hnlich(
 	ProdNr1 varchar(30) NOT NULL,
        ProdNr2 varchar(30) NOT NULL,
        PRIMARY KEY (ProdNr1, ProdNr2),

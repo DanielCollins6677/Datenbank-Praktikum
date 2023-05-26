@@ -1,7 +1,10 @@
 import DataClasses.Buch;
+import DataClasses.Category;
 import DataClasses.Produkt;
 
 import java.sql.*;
+import java.util.Collections;
+import java.util.List;
 
 public class Database {
     private Connection db;
@@ -30,6 +33,75 @@ public class Database {
         resultSet.close();
         inDatenbank.close();
         return produktAlreadyInDatabase;
+    }
+
+    private boolean produktAlreadyInDatabase(String prodnr) throws SQLException {
+        PreparedStatement inDatenbank = db.prepareStatement(
+                "SELECT prodnr from produkt where prodnr = ?"
+        );
+
+        inDatenbank.setString(1,prodnr);
+
+        ResultSet resultSet = inDatenbank.executeQuery();
+        boolean produktAlreadyInDatabase = false;
+        if(resultSet.next()){
+            produktAlreadyInDatabase = true;
+        }
+        resultSet.close();
+        inDatenbank.close();
+        return produktAlreadyInDatabase;
+    }
+
+    private boolean kategorieAlreadyInDatabase(String kategorieName) throws SQLException {
+        PreparedStatement inDatenbank = db.prepareStatement(
+                "SELECT name from kategorie where name = ?"
+        );
+
+        inDatenbank.setString(1,kategorieName);
+
+        ResultSet resultSet = inDatenbank.executeQuery();
+        boolean kategorieAlreadyInDatabase = false;
+        if(resultSet.next()){
+            kategorieAlreadyInDatabase = true;
+        }
+        resultSet.close();
+        inDatenbank.close();
+        return kategorieAlreadyInDatabase;
+    }
+
+    private boolean kategorieProduktAlreadyInDatabase(String prodnr,String kategorieName) throws SQLException {
+        PreparedStatement inDatenbank = db.prepareStatement(
+                "SELECT Kat_Name from produkt_kategorie where Kat_Name = ? AND prodnr = ?"
+        );
+
+        inDatenbank.setString(1,kategorieName);
+        inDatenbank.setString(2,prodnr);
+
+        ResultSet resultSet = inDatenbank.executeQuery();
+        boolean kategorieAlreadyInDatabase = false;
+        if(resultSet.next()){
+            kategorieAlreadyInDatabase = true;
+        }
+        resultSet.close();
+        inDatenbank.close();
+        return kategorieAlreadyInDatabase;
+    }
+    private boolean kategorieOrdnungAlreadyInDatabase(String oberKategorie, String unterKategorie) throws SQLException {
+        PreparedStatement inDatenbank = db.prepareStatement(
+                "SELECT Oberkategorie from Kategorie_Ordnung where Oberkategorie = ? AND Unterkategorie = ?"
+        );
+
+        inDatenbank.setString(1,oberKategorie);
+        inDatenbank.setString(2,unterKategorie);
+
+        ResultSet resultSet = inDatenbank.executeQuery();
+        boolean kategorieAlreadyInDatabase = false;
+        if(resultSet.next()){
+            kategorieAlreadyInDatabase = true;
+        }
+        resultSet.close();
+        inDatenbank.close();
+        return kategorieAlreadyInDatabase;
     }
 
     public void addProdukt(Produkt produkt) throws SQLException {
@@ -109,6 +181,54 @@ public class Database {
             buchVerlag.executeUpdate();
         }
 
+
+    }
+
+    public void addKategorien(List<Category> kategorien) throws SQLException {
+        try(
+            PreparedStatement addKategorie = db.prepareStatement(
+                    "INSERT INTO Kategorie (Name) VALUES (?)"
+            );
+            PreparedStatement addKategorieOrdnung = db.prepareStatement(
+                    "INSERT INTO Kategorie_Ordnung (Oberkategorie,Unterkategorie) VALUES (?,?)"
+            );
+            PreparedStatement addKategorieProdukt = db.prepareStatement(
+                    "INSERT INTO Produkt_Kategorie (ProdNr,Kat_Name) VALUES (?,?)"
+            );
+        ){
+
+            Collections.reverse(kategorien);
+
+            db.setAutoCommit(false);
+
+            for (Category kategorie : kategorien){
+                if(!kategorieAlreadyInDatabase(kategorie.getName())){
+                    addKategorie.setString(1,kategorie.getName());
+                    addKategorie.executeUpdate();
+                }
+
+                if( !(kategorie.getParentCategory() == null) &
+                    !kategorieOrdnungAlreadyInDatabase(kategorie.getParentCategory(),kategorie.getName())){
+                    addKategorieOrdnung.setString(1,kategorie.getParentCategory());
+                    addKategorieOrdnung.setString(2, kategorie.getName());
+                    addKategorieOrdnung.executeUpdate();
+                }
+
+                for(String produkt : kategorie.getItems()){
+                    if(!kategorieProduktAlreadyInDatabase(produkt,kategorie.getName()) && produktAlreadyInDatabase(produkt)){
+                        addKategorieProdukt.setString(1,produkt);
+                        addKategorieProdukt.setString(2,kategorie.getName());
+                        addKategorieProdukt.executeUpdate();
+                    }
+                }
+            }
+
+        } catch (Exception e){
+            System.err.println("Fehler beim Einlesen der Kategorien");
+            e.printStackTrace();
+        } finally {
+            db.setAutoCommit(true);
+        }
 
     }
 }

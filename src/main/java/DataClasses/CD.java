@@ -2,10 +2,12 @@ package DataClasses;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class CD extends Produkt{
-    private List<String> labels = new ArrayList<>();
+    private Set<String> labels = new HashSet<>();
     private LocalDate erscheinungsdatum;
 
     private List<String> künstler = new ArrayList<>();
@@ -15,11 +17,11 @@ public class CD extends Produkt{
     public CD() {
     }
 
-    public List<String> getLabels() {
+    public Set<String> getLabels() {
         return labels;
     }
 
-    public void setLabels(List<String> labels) {
+    public void setLabels(Set<String> labels) {
         this.labels = labels;
     }
 
