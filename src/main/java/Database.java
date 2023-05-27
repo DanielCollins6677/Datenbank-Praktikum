@@ -1,11 +1,10 @@
 import DataClasses.*;
 
 import java.sql.*;
+import java.sql.Date;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
 
 public class Database {
     private Connection db;
@@ -49,6 +48,7 @@ public class Database {
             )
         ){
             inDatenbank.setString(1,produkt.getProdNr());
+            if(produkt.getProdNr().length() > 30) System.err.print("ProdNr zu groß");
 
             ResultSet resultSet = inDatenbank.executeQuery();
             boolean produktAlreadyInDatabase = false;
@@ -61,7 +61,128 @@ public class Database {
         } catch (Exception e){
             throw new RuntimeException();
         }
+    }
 
+    private boolean produktAlreadyInDatabase(String prodnr) throws SQLException {
+        PreparedStatement inDatenbank = db.prepareStatement(
+                "SELECT prodnr from produkt where prodnr = ?"
+        );
+
+        inDatenbank.setString(1,prodnr);
+
+        ResultSet resultSet = inDatenbank.executeQuery();
+        boolean produktAlreadyInDatabase = false;
+        if(resultSet.next()){
+            produktAlreadyInDatabase = true;
+        }
+        resultSet.close();
+        inDatenbank.close();
+        return produktAlreadyInDatabase;
+    }
+
+    private boolean kategorieAlreadyInDatabase(String kategorieName) throws SQLException {
+        PreparedStatement inDatenbank = db.prepareStatement(
+                "SELECT name from kategorie where name = ?"
+        );
+
+        inDatenbank.setString(1,kategorieName);
+
+        ResultSet resultSet = inDatenbank.executeQuery();
+        boolean kategorieAlreadyInDatabase = false;
+        if(resultSet.next()){
+            kategorieAlreadyInDatabase = true;
+        }
+        resultSet.close();
+        inDatenbank.close();
+        return kategorieAlreadyInDatabase;
+    }
+
+    private boolean kategorieProduktAlreadyInDatabase(String prodnr,String kategorieName) throws SQLException {
+        PreparedStatement inDatenbank = db.prepareStatement(
+                "SELECT Kat_Name from produkt_kategorie where Kat_Name = ? AND prodnr = ?"
+        );
+
+        inDatenbank.setString(1,kategorieName);
+        inDatenbank.setString(2,prodnr);
+
+        ResultSet resultSet = inDatenbank.executeQuery();
+        boolean kategorieAlreadyInDatabase = false;
+        if(resultSet.next()){
+            kategorieAlreadyInDatabase = true;
+        }
+        resultSet.close();
+        inDatenbank.close();
+        return kategorieAlreadyInDatabase;
+    }
+    private boolean kategorieOrdnungAlreadyInDatabase(String oberKategorie, String unterKategorie) throws SQLException {
+        PreparedStatement inDatenbank = db.prepareStatement(
+                "SELECT Oberkategorie from Kategorie_Ordnung where Oberkategorie = ? AND Unterkategorie = ?"
+        );
+
+        inDatenbank.setString(1,oberKategorie);
+        inDatenbank.setString(2,unterKategorie);
+
+        ResultSet resultSet = inDatenbank.executeQuery();
+        boolean kategorieAlreadyInDatabase = false;
+        if(resultSet.next()){
+            kategorieAlreadyInDatabase = true;
+        }
+        resultSet.close();
+        inDatenbank.close();
+        return kategorieAlreadyInDatabase;
+    }
+
+    private boolean kundeAlreadyInDatabase(String kundenName) throws SQLException {
+        PreparedStatement inDatenbank = db.prepareStatement(
+                "SELECT name from Kunde where name = ?"
+        );
+
+        inDatenbank.setString(1,kundenName);
+
+        ResultSet resultSet = inDatenbank.executeQuery();
+        boolean kategorieAlreadyInDatabase = false;
+        if(resultSet.next()){
+            kategorieAlreadyInDatabase = true;
+        }
+        resultSet.close();
+        inDatenbank.close();
+        return kategorieAlreadyInDatabase;
+    }
+
+    private boolean rezensionAlreadyInDatabase(String kundenName, String prodnr) throws SQLException {
+        PreparedStatement inDatenbank = db.prepareStatement(
+                "SELECT Kname from Rezension where Kname = ? AND ProdNr = ?"
+        );
+
+        inDatenbank.setString(1,kundenName);
+        inDatenbank.setString(2,prodnr);
+
+        ResultSet resultSet = inDatenbank.executeQuery();
+        boolean kategorieAlreadyInDatabase = false;
+        if(resultSet.next()){
+            kategorieAlreadyInDatabase = true;
+        }
+        resultSet.close();
+        inDatenbank.close();
+        return kategorieAlreadyInDatabase;
+    }
+
+    private boolean produktÄhnlichAlreadyInDatabase(String prodnr1, String prodnr2) throws SQLException {
+        PreparedStatement inDatenbank = db.prepareStatement(
+                "SELECT ProdNr1 from Rezension where ProdNr1 = ? AND ProdNr2 = ?"
+        );
+
+        inDatenbank.setString(1,prodnr1);
+        inDatenbank.setString(2,prodnr2);
+
+        ResultSet resultSet = inDatenbank.executeQuery();
+        boolean kategorieAlreadyInDatabase = false;
+        if(resultSet.next()){
+            kategorieAlreadyInDatabase = true;
+        }
+        resultSet.close();
+        inDatenbank.close();
+        return kategorieAlreadyInDatabase;
     }
 
     public void addFiliale(Filiale filiale) throws SQLException {
@@ -84,6 +205,8 @@ public class Database {
 
             //Parameter
 
+            if(filiale.getName().length() > 30) System.err.print("Name zu groß");
+            if(filiale.getStraße().length() > 50) System.err.print("Straße zu groß");
             newFiliale.setString(1, filiale.getName());
             newFiliale.setInt(2, filiale.getPlz());
             newFiliale.setString(3, filiale.getStraße());
@@ -91,6 +214,7 @@ public class Database {
 
 
             filialeAngebot.setString(1, filiale.getName());
+            if(filiale.getName().length() > 50) System.err.print("FName zu groß");
 
 
             Map<Produkt, List<PreisZustand>> produktPreis = filiale.getProduktPreis();
@@ -105,17 +229,22 @@ public class Database {
                     filialeAngebot.setDouble(3,einzelnesProduktAngebot.getPreis());
                     filialeAngebot.setString(4,einzelnesProduktAngebot.getZustand());
                     filialeAngebot.executeUpdate();
+                    if((prod.getProdNr()).length() > 30) System.err.print("ProdNr zu groß");
+                    if(einzelnesProduktAngebot.getZustand().length() > 30) System.err.print("Produkt Angebot zu groß");
                 }
             }
 
-        }catch (Exception e){
+            db.commit();
+
+        }catch (SQLException e){
+            System.err.println("Konnte Filiale nicht in Datenbank hinzufügen");
             e.printStackTrace();
         } finally {
             db.setAutoCommit(true);
         }
     }
 
-    private void addProdukt(Produkt produkt) throws SQLException {
+    private void addProdukt(Produkt produkt) {
 
         try (
             PreparedStatement newProdukt = db.prepareStatement(
@@ -124,12 +253,12 @@ public class Database {
             );
         ) {
             if(produktAlreadyInDatabase(produkt)){
-                System.out.println(produkt.getProdNr() + " ist schon in der Datenbank");
+                //System.out.println(produkt.getProdNr() + " ist schon in der Datenbank");
                 return;
             }
 
-            if(db.getAutoCommit()) db.setAutoCommit(false);
-
+            if(produkt.getProdNr().length() > 30) System.err.print("ProdNr zu groß");
+            if(produkt.getTitel().length() > 255) System.err.print("Titel zu groß");
             newProdukt.setString(1, produkt.getProdNr());
             newProdukt.setString(2, produkt.getTitel());
             newProdukt.setDouble(3,produkt.getRating());
@@ -139,7 +268,6 @@ public class Database {
             newProdukt.executeUpdate();
 
             if(produkt instanceof Buch){
-                //System.out.println("Ein neues Buch!");
                 addBuch((Buch) produkt);
             } else if(produkt instanceof CD){
                 addCD((CD) produkt);
@@ -148,11 +276,12 @@ public class Database {
             }
             db.commit();
 
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        } catch (SQLException e){
+            System.err.println("Konnte Produkt nicht in Datenbank hinzufügen");
+            e.printStackTrace();
         }
     }
-    private void addBuch(Buch buch) throws SQLException {
+    private void addBuch(Buch buch) {
         try(
             PreparedStatement newBook = db.prepareStatement(
                     "INSERT INTO Buch (prodnr,seitenzahl,erscheinungsjahr,isbn) " +
@@ -172,6 +301,7 @@ public class Database {
 
             //Parameter
 
+            if(buch.getProdNr().length() > 30) System.err.print("ProdNr zu groß");
             newBook.setString(1, buch.getProdNr());
             newBook.setInt(2, buch.getSeitenZahl());
             newBook.setDate(3, Date.valueOf(buch.getErscheinungsJahr()));
@@ -186,6 +316,7 @@ public class Database {
             for (String autor : buch.getAuthors()) {
                 buchAutor.setString(2, autor);
                 buchAutor.executeUpdate();
+                if((autor).length() > 30) System.err.print("Autor zu groß");
             }
 
 
@@ -194,14 +325,16 @@ public class Database {
             for (String verlag : buch.getVerlag()) {
                 buchVerlag.setString(2, verlag);
                 buchVerlag.executeUpdate();
+                if((verlag).length() > 50) System.err.print("Verlag zu groß");
             }
 
             // JDBC Erweiterung
-        }catch (SQLException e) {
-            throw new RuntimeException(e);
+        }catch (SQLException e){
+            System.err.println("Konnte Buch nicht in Datenbank hinzufügen");
+            e.printStackTrace();
         }
     }
-    private void addCD(CD cd) throws SQLException {
+    private void addCD(CD cd)  {
         try(
             PreparedStatement newCD = db.prepareStatement(
                     "INSERT INTO CD (prodnr,erscheinungsdatum) " +
@@ -224,6 +357,7 @@ public class Database {
 
             //Parameter
 
+            if(cd.getProdNr().length() > 30) System.err.print("ProdNr zu groß");
             newCD.setString(1, cd.getProdNr());
             newCD.setDate(2, Date.valueOf(cd.getErscheinungsdatum()));
 
@@ -232,35 +366,45 @@ public class Database {
 
 
             cdKünstler.setString(1, cd.getProdNr());
+            if(cd.getProdNr().length() > 30) System.err.print("Name zu groß");
 
+
+            //cdKünstler.setString(2, ...)
             for(String name : cd.getKünstler()){
+
                 cdKünstler.setString(2,name);
+                if(name.length() > 60) System.err.println("Name zu groß:" + name.length());
                 cdKünstler.executeUpdate();
             }
 
-
             cdLabel.setString(1, cd.getProdNr());
+            if(cd.getProdNr().length() > 30) System.err.print("ProdNr zu groß");
 
 
             for(String label : cd.getLabels()){
                 cdLabel.setString(2,label);
                 cdLabel.executeUpdate();
+                if(label.length() > 100) System.err.print("Label zu groß");
+
             }
 
 
             cdWerke.setString(1, cd.getProdNr());
+            if(cd.getProdNr().length() > 30) System.err.print("ProdNr zu groß");
 
             for(String titel : cd.getTracks()){
                 cdWerke.setString(2,titel);
                 cdWerke.executeUpdate();
+                if(titel.length() > 255) System.err.print("Titel zu groß");
             }
 
-        }catch (SQLException e) {
-            throw new RuntimeException(e);
+        }catch (SQLException e){
+            System.err.println("Konnte CD nicht in Datenbank hinzufügen");
+            e.printStackTrace();
         }
 
     }
-    private void addDVD(DVD dvd) throws SQLException {
+    private void addDVD(DVD dvd) {
         try(
             PreparedStatement newDVD = db.prepareStatement(
                     "INSERT INTO DVD (prodnr,laufzeit,regioncode) " +
@@ -275,12 +419,10 @@ public class Database {
                             "VALUES (?,?,?)"
             );
         ) {
-            if(db.getAutoCommit()) db.setAutoCommit(false);
-
-
 
             //Parameter
 
+            if(dvd.getProdNr().length() > 30) System.err.print("ProdNr zu groß");
             newDVD.setString(1, dvd.getProdNr());
             newDVD.setInt(2, dvd.getLaufzeit());
             newDVD.setInt(3, dvd.getRegionCode());
@@ -290,59 +432,178 @@ public class Database {
 
 
             dvdFormat.setString(1,dvd.getProdNr());
+            if(dvd.getProdNr().length() > 30) System.err.print("ProdNr zu groß");
 
             for(String format : dvd.getFormat()){
                 dvdFormat.setString(2,format);
                 dvdFormat.executeUpdate();
+                if((format).length() > 50) System.err.print("Format zu groß");
             }
 
 
             dvdBeteiligt.setString(1, dvd.getProdNr());
+            if(dvd.getProdNr().length() > 30) System.err.print("ProdNr zu groß");
 
             for(DVDBeteiligt beteiligt : dvd.getDvdBeteiligte()){
                 dvdBeteiligt.setString(2,beteiligt.getName());
                 dvdBeteiligt.setString(3,beteiligt.getTitel().toString());
                 dvdBeteiligt.executeUpdate();
+                if(beteiligt.getName().length() > 30) System.err.print("Name zu groß");
+                if(beteiligt.getTitel().toString().length() > 20) System.err.print("Titel zu groß");
             }
 
-        }catch (SQLException e) {
-            throw new RuntimeException(e);
+        }catch (SQLException e){
+            System.err.println("Konnte DVD nicht in Datenbank hinzufügen");
+            e.printStackTrace();
         }
     }
-    public void addCategories(List<Category> categories) throws SQLException {
+    public void addKategorien(List<Category> kategorien) throws SQLException {
         try(
-            PreparedStatement newKategorie = db.prepareStatement(
-                    "INSERT INTO Kategorie (name) " +
-                            "VALUES (?)"
-            );
-            PreparedStatement kategorieOrdnung = db.prepareStatement(
-                    "INSERT INTO kategorieOrdnung (oberkategorie,unterkategorie)" +
-                            "VALUES (?,?)"
-            );
+                PreparedStatement addKategorie = db.prepareStatement(
+                        "INSERT INTO Kategorie (Name) VALUES (?)"
+                );
+                PreparedStatement addKategorieOrdnung = db.prepareStatement(
+                        "INSERT INTO Kategorie_Ordnung (Oberkategorie,Unterkategorie) VALUES (?,?)"
+                );
+                PreparedStatement addKategorieProdukt = db.prepareStatement(
+                        "INSERT INTO Produkt_Kategorie (ProdNr,Kat_Name) VALUES (?,?)"
+                );
         ){
-            if(db.getAutoCommit()) db.setAutoCommit(false);
 
-            //Parameter
+            Collections.reverse(kategorien);
 
-            for(Category category : categories) {
-                newKategorie.setString(1, category.getName());
+            db.setAutoCommit(false);
 
-                newKategorie.executeUpdate();
+            for (Category kategorie : kategorien){
+                if(!kategorieAlreadyInDatabase(kategorie.getName())){
+                    addKategorie.setString(1,kategorie.getName());
+                    addKategorie.executeUpdate();
+                }
 
-                kategorieOrdnung.setString(1, category.getParentCategory());
-                kategorieOrdnung.setString(2, category.getName());
-                kategorieOrdnung.executeUpdate();
+                if( !(kategorie.getParentCategory() == null) &
+                        !kategorieOrdnungAlreadyInDatabase(kategorie.getParentCategory(),kategorie.getName())){
+                    addKategorieOrdnung.setString(1,kategorie.getParentCategory());
+                    addKategorieOrdnung.setString(2, kategorie.getName());
+                    addKategorieOrdnung.executeUpdate();
+                }
+
+                for(String produkt : kategorie.getItems()){
+                    if(!kategorieProduktAlreadyInDatabase(produkt,kategorie.getName()) && produktAlreadyInDatabase(produkt)){
+                        addKategorieProdukt.setString(1,produkt);
+                        addKategorieProdukt.setString(2,kategorie.getName());
+                        addKategorieProdukt.executeUpdate();
+                    }
+                }
             }
 
-        }catch (SQLException e) {
-            throw new RuntimeException(e);
+        } catch (SQLException e){
+            System.err.println("Konnte Kategorie nicht in Datenbank hinzufügen");
+            e.printStackTrace();
+        } finally {
+            db.setAutoCommit(true);
         }
 
     }
 
-    public void clearDB() {
-        try{
+    public void addRezension(List<Review> reviews) throws SQLException {
+        try(
+                PreparedStatement addRezension = db.prepareStatement(
+                        "INSERT INTO Rezension (Kname,ProdNr,Rating,Helpful,Zeitpunkt,Kommentar)" +
+                                "VALUES (?,?,?,?,?,?)"
+                )
+        ){
+            db.setAutoCommit(false);
+            for(Review review : reviews){
+                String kundenName = review.getUser();
+                if(!kundeAlreadyInDatabase(kundenName)){
+                    addKunde(kundenName);
+                }
+                if(!produktAlreadyInDatabase(review.getProdID())){
+                    Ablehner.ablehnen(review.toString(),"Produkt der Review nicht in der Datenbank");
+                    continue;
+                }
 
+                if(rezensionAlreadyInDatabase(review.getUser(),review.getProdID())){
+                    continue;
+                }
+
+
+                addRezension.setString(1,kundenName);
+                addRezension.setString(2,review.getProdID());
+                addRezension.setDouble(3,review.getRating());
+                addRezension.setInt(4,review.getHelpful());
+                addRezension.setDate(5, Date.valueOf(review.getDate()));
+                addRezension.setString(6, review.getContent());
+
+                if(review.getContent().length() > 10000) System.err.println("Kommentar zu lang: " + review.getContent().length());
+
+                addRezension.executeUpdate();
+
+
+            }
+
+        } catch (Exception e){
+            System.err.println("Konnte Rezensionen nicht in Datenbank hinzufügen");
+            e.printStackTrace();
+        } finally {
+            db.setAutoCommit(true);
+        }
+    }
+    private void addKunde(String kundeName) {
+        try(
+                PreparedStatement addKunde = db.prepareStatement(
+                        "INSERT INTO kunde (name)" +
+                                "VALUES (?)"
+                )
+        ){
+            addKunde.setString(1,kundeName);
+            addKunde.executeUpdate();
+        } catch (SQLException e){
+            System.err.println("Konnte Kunden nicht in Datenbank hinzufügen");
+            e.printStackTrace();
+        }
+    }
+
+    public void addSimilars(Map<String, String> similars) throws SQLException{
+        try(
+            PreparedStatement addProduktÄhnlich = db.prepareStatement(
+                    "INSERT INTO produkt_ähnlich (ProdNr1,ProdNr2)" +
+                        "VALUES (?,?)"
+            )
+        ){
+            db.setAutoCommit(false);
+
+            for(String prodnr1 : similars.keySet()){
+                String prodnr2 = similars.get(prodnr1);
+
+                //Falls eins der beiden Produkte nicht in der DB
+                if( ! (produktAlreadyInDatabase(prodnr1) && produktAlreadyInDatabase(prodnr2) ) ){
+                    Ablehner.ablehnen(prodnr1 + " ähnlich zu " + prodnr2, "Eins oder beide Produkte nicht in der Datenbank");
+                    continue;
+                }
+
+                addProduktÄhnlich.setString(1,prodnr1);
+                addProduktÄhnlich.setString(2,prodnr2);
+                addProduktÄhnlich.executeUpdate();
+
+            }
+
+            db.commit();
+
+        } catch (SQLException e) {
+            System.err.println("Konnte Produkt_Ähnlich nicht in Datenbank hinzufügen");
+            e.printStackTrace();
+        } finally {
+            db.setAutoCommit(true);
+        }
+    }
+
+    public void clearDB() throws SQLException {
+        try{
+            db.setAutoCommit(false);
+
+            clearRezensionDB();
+            clearKundeDB();
             clearKategorieDB();
             clearFilialeDB();
             clearBuchDB();
@@ -350,13 +611,45 @@ public class Database {
             clearDVDDB();
             clearProdukt();
 
+            db.commit();
+
         } catch (Exception e) {
             System.err.println("Could not clear Database!");
             e.printStackTrace();
+        } finally {
+            db.setAutoCommit(true);
         }
     }
 
-    public void clearBuchDB() throws SQLException {
+    public void clearKundeDB() {
+        try(
+                PreparedStatement clearBuch = db.prepareStatement(
+                        "Delete from kunde_konto;" +
+                                "Delete from kunde_adresse;" +
+                                "Delete from kunde;"
+                );
+        ){
+            clearBuch.executeUpdate();
+        }catch (SQLException e) {
+            System.err.println("Could not clear Kunde");
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void clearRezensionDB() {
+        try(
+                PreparedStatement clearRezension = db.prepareStatement(
+                        "Delete from rezension;"
+                );
+        ){
+            clearRezension.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("Could not clear Rezension");
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void clearBuchDB() {
         try(
             PreparedStatement clearBuch = db.prepareStatement(
                     "Delete from buch_autor;" +
@@ -365,10 +658,13 @@ public class Database {
             );
         ){
             clearBuch.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("Could not clear Buch");
+            throw new RuntimeException(e);
         }
     }
 
-    public void clearCDDB() throws SQLException{
+    public void clearCDDB() {
         try(
                 PreparedStatement clearCD = db.prepareStatement(
                         "Delete from cd_künstler;" +
@@ -378,10 +674,13 @@ public class Database {
                 );
         ){
             clearCD.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("Could not clear CD");
+            throw new RuntimeException(e);
         }
     }
 
-    public void clearDVDDB() throws SQLException{
+    public void clearDVDDB() {
         try(
             PreparedStatement clearDVD = db.prepareStatement(
                     "Delete from dvd_beteiligt;" +
@@ -390,10 +689,13 @@ public class Database {
             );
         ){
             clearDVD.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("Could not clear DVD");
+            throw new RuntimeException(e);
         }
     }
 
-    private void clearProdukt() throws SQLException {
+    public void clearProdukt() {
         try(
             PreparedStatement clearProdukt = db.prepareStatement(
                     "Delete from produkt_kategorie;" + 
@@ -402,10 +704,13 @@ public class Database {
             );
         ){
             clearProdukt.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("Could not clear Produkt");
+            throw new RuntimeException(e);
         }
     }
 
-    public void clearFilialeDB() throws SQLException{
+    public void clearFilialeDB() {
         try(
             PreparedStatement clearFiliale = db.prepareStatement(
                     "Delete from filiale_angebot;" +
@@ -413,10 +718,13 @@ public class Database {
             );
         ){
             clearFiliale.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("Could not clear Filiale");
+            throw new RuntimeException(e);
         }
     }
 
-    public void clearKategorieDB() throws SQLException{
+    public void clearKategorieDB() {
         try(
             PreparedStatement clearKategorie = db.prepareStatement(
                     "Delete from produkt_kategorie;" +
@@ -425,6 +733,9 @@ public class Database {
             );
         ){
             clearKategorie.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("Could not clear Kategorie");
+            throw new RuntimeException(e);
         }
     }
 
@@ -483,7 +794,7 @@ public class Database {
             künstler.add("k1");
             künstler.add("k2");
             test3.setKünstler(künstler);
-            List<String> label = new ArrayList<>();
+            Set<String> label = new HashSet<>();
             label.add("label1");
             label.add("label2");
             test3.setLabels(label);
@@ -543,48 +854,4 @@ public class Database {
             e.printStackTrace();
         }
     }
-
-        /*private void addKunde(Kunde kunde) throws SQLException {
-            PreparedStatement newKunde = db.prepareStatement(
-                    "INSERT INTO Kunde (name) " +
-                            "VALUES (?)"
-            );
-
-            //Parameter
-
-            newKunde.setString(1, kunde.getName());
-
-            newKunde.executeUpdate();
-
-            PreparedStatement kundeAdresse = db.prepareStatement(
-                    "INSERT INTO kunde_adresse (name,adresse)" +
-                            "VALUES (?,?)"
-            );
-
-            kundeAdresse.setString(1, kunde.getName());
-
-            for(String adresse : kunde.getAdresse()){
-                kundeAdresse.setString(2,adresse);
-                kundeAdresse.executeUpdate();
-            }
-
-            PreparedStatement kundeKonto = db.prepareStatement(
-                    "INSERT INTO kunde_konto (name,kontoname, kontonummer)" +
-                            "VALUES (?,?,?)"
-            );
-
-            kundeKonto.setString(1, kunde.getName());
-
-            for(String kontoname : kunde.getKontoname()){
-                kunde.setString(2,kontoname);
-                kundeKonto.executeUpdate();
-            }
-            for(String kontonummer : kunde.getKontonummer()){
-                kunde.setString(3,kontonummer);
-                kundeKonto.executeUpdate();
-            }
-
-        }
-    }
-         */
 }

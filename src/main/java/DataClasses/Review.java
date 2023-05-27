@@ -89,7 +89,7 @@ public class Review {
 
     @Override
     public String toString() {
-        return "DataClasses.Review{" +
+        return "Review{" +
                 "ProdID='" + ProdID + '\'' +
                 ", rating=" + rating +
                 ", helpful=" + helpful +
