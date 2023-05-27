@@ -1,5 +1,9 @@
 package DataClasses;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,4 +19,25 @@ public class Ablehner {
         }
     }
 
+    public static void abgelehntDateiErstellen() {
+
+        String basePath = new File("").getAbsolutePath();
+
+        try (
+            FileWriter fw = new FileWriter(new File(basePath + "/src/main/Abgelehnt"));
+            BufferedWriter bw = new BufferedWriter(fw);
+        ) {
+            for(String abgelehnte : abgelehnt.keySet()){
+                String grund = abgelehnt.get(abgelehnte);
+
+                bw.write("\'" + abgelehnte + "\' wurde abgelehnt weil: " + grund + "\n");
+            }
+
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+
+    }
 }

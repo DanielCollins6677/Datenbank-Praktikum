@@ -10,10 +10,6 @@ import java.time.LocalDate;
 import java.util.*;
 
 public class Main {
-
-    //Globale Listen aller Filialen
-    public static List<Filiale> filialen = new ArrayList<>();
-
     public static void main(String[] args) throws ParserConfigurationException, IOException, SAXException {
 
         String basePath = new File("").getAbsolutePath();
@@ -72,33 +68,31 @@ public class Main {
             e.printStackTrace();
         }
 
-        /*for(String key : abgelehnt.keySet()){
-            System.out.println(key + " wurde abgelehnt wegen:");
-            System.out.println(abgelehnt.get(key) + "\n");
-        }*/
 
-        Database db = new Database("localhost",5432,"postgres","postgres","DBPraktikum#2023");
-        db.clearDB();
-        db.testAddFilialeDB();
-/*
+        //Database db = new Database("localhost",5432,"postgres","postgres","DBPraktikum#2023");
         Database db = new Database("localhost",5432,"dbpraktikum","postgres","1234");
+
 
         //ReviewLogik.calculateRatingTest();
 
 
-
         try {
+            db.clearDB();
+
             db.addFiliale(f1);
             db.addFiliale(f2);
-        } catch (SQLException e) {
-            //db.addKategorien(categories);
+            db.addKategorien(categories);
             db.addRezension(reviewList);
+
+            db.addSimilars(XMLReader.similars);
+
+            System.out.println("Alle Daten konten in Datenbank gelesen werden!");
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
 
+        Ablehner.abgelehntDateiErstellen();
 
- */
 
     }
 

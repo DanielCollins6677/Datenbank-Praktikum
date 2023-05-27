@@ -27,9 +27,9 @@ CREATE TABLE CD (
        Erscheinungsdatum Date NOT NULL,
        PRIMARY KEY (ProdNr),
        FOREIGN KEY (ProdNr) REFERENCES Produkt );
-CREATE TABLE CD_Künstler (
+CREATE TABLE CD_KÃ¼nstler (
 	ProdNr varchar(30) NOT NULL,
-	Name VARCHAR (50) NOT NULL,
+	Name VARCHAR (60) NOT NULL,
        PRIMARY KEY (ProdNr, Name),
        FOREIGN KEY (ProdNr) REFERENCES CD);
 CREATE TABLE cd_label(
@@ -51,7 +51,7 @@ CREATE TABLE DVD (
 CREATE TABLE DVD_Beteiligt (
 	ProdNr varchar(30) NOT NULL,
 	Name VARCHAR (50) NOT NULL,
-       Titel VARCHAR (255) NOT NULL,
+       Titel VARCHAR (20) NOT NULL,
        PRIMARY KEY (ProdNr, Name,Titel),
        FOREIGN KEY (ProdNr) REFERENCES DVD);
 CREATE TABLE DVD_Format (
@@ -62,7 +62,7 @@ CREATE TABLE DVD_Format (
 CREATE TABLE Filiale (
 	Name VARCHAR (50) NOT NULL,
        PLZ int,
-       Straße VARCHAR (50),
+       StraÃŸe VARCHAR (50),
        PRIMARY KEY (Name));
 CREATE TABLE Filiale_Angebot (
 	FName VARCHAR (50) NOT NULL,
@@ -73,10 +73,10 @@ CREATE TABLE Filiale_Angebot (
        FOREIGN KEY (ProdNr) REFERENCES Produkt,
        FOREIGN KEY (FName) REFERENCES Filiale);
 CREATE TABLE Kategorie (
-       Name VARCHAR (30) NOT NULL PRIMARY KEY);
+       Name VARCHAR (80) NOT NULL PRIMARY KEY);
 CREATE TABLE Kategorie_Ordnung(
-       Oberkategorie VARCHAR (30) NOT NULL,
-       Unterkategorie VARCHAR (30) NOT NULL,
+       Oberkategorie VARCHAR (80) NOT NULL,
+       Unterkategorie VARCHAR (80) NOT NULL,
        PRIMARY KEY (Oberkategorie, Unterkategorie),
        FOREIGN KEY (Oberkategorie) REFERENCES Kategorie,
        FOREIGN KEY (Unterkategorie) REFERENCES Kategorie);
@@ -96,11 +96,11 @@ CREATE TABLE Kunde_Konto (
 	Foreign Key(Name) References Kunde);
 CREATE TABLE Produkt_Kategorie (
 	ProdNr varchar(30) NOT NULL,
-       Kat_Name VARCHAR (30) NOT NULL,
+       Kat_Name VARCHAR (80) NOT NULL,
        PRIMARY KEY (ProdNr, Kat_name),
        FOREIGN KEY (ProdNr) REFERENCES Produkt,
        FOREIGN KEY (Kat_Name) REFERENCES Kategorie);
-CREATE TABLE Produkt_ähnlich(
+CREATE TABLE Produkt_Ã¤hnlich(
 	ProdNr1 varchar(30) NOT NULL,
        ProdNr2 varchar(30) NOT NULL,
        PRIMARY KEY (ProdNr1, ProdNr2),
@@ -121,7 +121,9 @@ CREATE TABLE Rezension (
 	Kname varchar(30) NOT NULL,
        ProdNr varchar(30) NOT NULL,
        Rating INT NOT NULL,
-       Kommentar VARCHAR (255) NOT NULL,
+       Helpful INT NOT NULL,
+       Zeitpunkt Date NOT NULL,
+       Kommentar VARCHAR (4000),
        PRIMARY KEY (Kname, ProdNr),
        FOREIGN KEY (Kname) REFERENCES Kunde,
        FOREIGN KEY (ProdNr) REFERENCES Produkt);
