@@ -61,8 +61,112 @@ public class Database {
         } catch (Exception e){
             throw new RuntimeException();
         }
-
     }
+
+    private boolean produktAlreadyInDatabase(String prodnr) throws SQLException {
+        PreparedStatement inDatenbank = db.prepareStatement(
+                "SELECT prodnr from produkt where prodnr = ?"
+        );
+
+        inDatenbank.setString(1,prodnr);
+
+        ResultSet resultSet = inDatenbank.executeQuery();
+        boolean produktAlreadyInDatabase = false;
+        if(resultSet.next()){
+            produktAlreadyInDatabase = true;
+        }
+        resultSet.close();
+        inDatenbank.close();
+        return produktAlreadyInDatabase;
+    }
+
+    private boolean kategorieAlreadyInDatabase(String kategorieName) throws SQLException {
+        PreparedStatement inDatenbank = db.prepareStatement(
+                "SELECT name from kategorie where name = ?"
+        );
+
+        inDatenbank.setString(1,kategorieName);
+
+        ResultSet resultSet = inDatenbank.executeQuery();
+        boolean kategorieAlreadyInDatabase = false;
+        if(resultSet.next()){
+            kategorieAlreadyInDatabase = true;
+        }
+        resultSet.close();
+        inDatenbank.close();
+        return kategorieAlreadyInDatabase;
+    }
+
+    private boolean kategorieProduktAlreadyInDatabase(String prodnr,String kategorieName) throws SQLException {
+        PreparedStatement inDatenbank = db.prepareStatement(
+                "SELECT Kat_Name from produkt_kategorie where Kat_Name = ? AND prodnr = ?"
+        );
+
+        inDatenbank.setString(1,kategorieName);
+        inDatenbank.setString(2,prodnr);
+
+        ResultSet resultSet = inDatenbank.executeQuery();
+        boolean kategorieAlreadyInDatabase = false;
+        if(resultSet.next()){
+            kategorieAlreadyInDatabase = true;
+        }
+        resultSet.close();
+        inDatenbank.close();
+        return kategorieAlreadyInDatabase;
+    }
+    private boolean kategorieOrdnungAlreadyInDatabase(String oberKategorie, String unterKategorie) throws SQLException {
+        PreparedStatement inDatenbank = db.prepareStatement(
+                "SELECT Oberkategorie from Kategorie_Ordnung where Oberkategorie = ? AND Unterkategorie = ?"
+        );
+
+        inDatenbank.setString(1,oberKategorie);
+        inDatenbank.setString(2,unterKategorie);
+
+        ResultSet resultSet = inDatenbank.executeQuery();
+        boolean kategorieAlreadyInDatabase = false;
+        if(resultSet.next()){
+            kategorieAlreadyInDatabase = true;
+        }
+        resultSet.close();
+        inDatenbank.close();
+        return kategorieAlreadyInDatabase;
+    }
+
+    private boolean kundeAlreadyInDatabase(String kundenName) throws SQLException {
+        PreparedStatement inDatenbank = db.prepareStatement(
+                "SELECT name from Kunde where name = ?"
+        );
+
+        inDatenbank.setString(1,kundenName);
+
+        ResultSet resultSet = inDatenbank.executeQuery();
+        boolean kategorieAlreadyInDatabase = false;
+        if(resultSet.next()){
+            kategorieAlreadyInDatabase = true;
+        }
+        resultSet.close();
+        inDatenbank.close();
+        return kategorieAlreadyInDatabase;
+    }
+
+    private boolean rezensionAlreadyInDatabase(String kundenName, String prodnr) throws SQLException {
+        PreparedStatement inDatenbank = db.prepareStatement(
+                "SELECT Kname from Rezension where Kname = ? AND ProdNr = ?"
+        );
+
+        inDatenbank.setString(1,kundenName);
+        inDatenbank.setString(2,prodnr);
+
+        ResultSet resultSet = inDatenbank.executeQuery();
+        boolean kategorieAlreadyInDatabase = false;
+        if(resultSet.next()){
+            kategorieAlreadyInDatabase = true;
+        }
+        resultSet.close();
+        inDatenbank.close();
+        return kategorieAlreadyInDatabase;
+    }
+
 
     public void addFiliale(Filiale filiale) throws SQLException {
         try(
@@ -572,48 +676,109 @@ public class Database {
             e.printStackTrace();
         }
     }
-    
-        /*private void addKunde(Kunde kunde) throws SQLException {
-            PreparedStatement newKunde = db.prepareStatement(
-                    "INSERT INTO Kunde (name) " +
-                            "VALUES (?)"
-            );
 
-            //Parameter
+    public void addKategorien(List<Category> kategorien) throws SQLException {
+        try(
+                PreparedStatement addKategorie = db.prepareStatement(
+                        "INSERT INTO Kategorie (Name) VALUES (?)"
+                );
+                PreparedStatement addKategorieOrdnung = db.prepareStatement(
+                        "INSERT INTO Kategorie_Ordnung (Oberkategorie,Unterkategorie) VALUES (?,?)"
+                );
+                PreparedStatement addKategorieProdukt = db.prepareStatement(
+                        "INSERT INTO Produkt_Kategorie (ProdNr,Kat_Name) VALUES (?,?)"
+                );
+        ){
 
-            newKunde.setString(1, kunde.getName());
+            Collections.reverse(kategorien);
 
-            newKunde.executeUpdate();
+            db.setAutoCommit(false);
 
-            PreparedStatement kundeAdresse = db.prepareStatement(
-                    "INSERT INTO kunde_adresse (name,adresse)" +
-                            "VALUES (?,?)"
-            );
+            for (Category kategorie : kategorien){
+                if(!kategorieAlreadyInDatabase(kategorie.getName())){
+                    addKategorie.setString(1,kategorie.getName());
+                    addKategorie.executeUpdate();
+                }
 
-            kundeAdresse.setString(1, kunde.getName());
+                if( !(kategorie.getParentCategory() == null) &
+                        !kategorieOrdnungAlreadyInDatabase(kategorie.getParentCategory(),kategorie.getName())){
+                    addKategorieOrdnung.setString(1,kategorie.getParentCategory());
+                    addKategorieOrdnung.setString(2, kategorie.getName());
+                    addKategorieOrdnung.executeUpdate();
+                }
 
-            for(String adresse : kunde.getAdresse()){
-                kundeAdresse.setString(2,adresse);
-                kundeAdresse.executeUpdate();
+                for(String produkt : kategorie.getItems()){
+                    if(!kategorieProduktAlreadyInDatabase(produkt,kategorie.getName()) && produktAlreadyInDatabase(produkt)){
+                        addKategorieProdukt.setString(1,produkt);
+                        addKategorieProdukt.setString(2,kategorie.getName());
+                        addKategorieProdukt.executeUpdate();
+                    }
+                }
             }
 
-            PreparedStatement kundeKonto = db.prepareStatement(
-                    "INSERT INTO kunde_konto (name,kontoname, kontonummer)" +
-                            "VALUES (?,?,?)"
-            );
+        } catch (Exception e){
+            System.err.println("Fehler beim Einlesen der Kategorien");
+            e.printStackTrace();
+        } finally {
+            db.setAutoCommit(true);
+        }
 
-            kundeKonto.setString(1, kunde.getName());
+    }
 
-            for(String kontoname : kunde.getKontoname()){
-                kunde.setString(2,kontoname);
-                kundeKonto.executeUpdate();
+    public void addRezension(List<Review> reviews) throws SQLException {
+        try(
+                PreparedStatement addRezension = db.prepareStatement(
+                        "INSERT INTO Rezension (Kname,ProdNr,Rating,Helpful,Zeitpunkt,Kommentar)" +
+                                "VALUES (?,?,?,?,?,?)"
+                )
+        ){
+            db.setAutoCommit(false);
+            for(Review review : reviews){
+                String kundenName = review.getUser();
+                if(!kundeAlreadyInDatabase(kundenName)){
+                    addKunde(kundenName);
+                }
+                if(!produktAlreadyInDatabase(review.getProdID())){
+                    Ablehner.ablehnen(review.toString(),"Produkt der Review nicht in der Datenbank");
+                    continue;
+                }
+
+                if(rezensionAlreadyInDatabase(review.getUser(),review.getProdID())){
+                    continue;
+                }
+
+
+                addRezension.setString(1,kundenName);
+                addRezension.setString(2,review.getProdID());
+                addRezension.setDouble(3,review.getRating());
+                addRezension.setInt(4,review.getHelpful());
+                addRezension.setDate(5, Date.valueOf(review.getDate()));
+                addRezension.setString(6, review.getContent());
+
+                addRezension.executeUpdate();
+
+
             }
-            for(String kontonummer : kunde.getKontonummer()){
-                kunde.setString(3,kontonummer);
-                kundeKonto.executeUpdate();
-            }
 
+        } catch (Exception e){
+            System.err.println("Konnte Rezensionen nicht in Datenbank hinzufügen");
+            e.printStackTrace();
+        } finally {
+            db.setAutoCommit(true);
         }
     }
-         */
+    private void addKunde(String kundeName) throws SQLException {
+        try(
+                PreparedStatement addKunde = db.prepareStatement(
+                        "INSERT INTO kunde (name)" +
+                                "VALUES (?)"
+                )
+        ){
+            addKunde.setString(1,kundeName);
+            addKunde.executeUpdate();
+        } catch (Exception e){
+            System.err.println("Konnte Kunden nicht in Datenbank hinzufügen");
+            e.printStackTrace();
+        }
+    }
 }
