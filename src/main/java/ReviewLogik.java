@@ -1,3 +1,4 @@
+import DataClasses.Ablehner;
 import DataClasses.Filiale;
 import DataClasses.Produkt;
 import DataClasses.Review;
@@ -72,6 +73,37 @@ public class ReviewLogik {
         System.out.println(ReviewLogik.calculateRating(testReviews1,"2"));
         System.out.println(ReviewLogik.calculateRating(testReviews2,"1"));
         System.out.println(ReviewLogik.calculateRating(testReviews2,"2"));
+    }
+
+    public static void removeFaultyReviews(List<Review> reviews){
+        List<Review> abgelehnteReviews = new ArrayList<>();
+        for (Review review : reviews){
+
+            if(review.getHelpful() < 0) review.setHelpful(0);
+
+            if(review.getUser() == null ){
+                Ablehner.ablehnen(review.toString(),"Review hat keinen Benutzer");
+                abgelehnteReviews.add(review);
+                continue;
+            }
+            if(review.getProdID() == null){
+                Ablehner.ablehnen(review.toString(),"Review hat kein Produkt");
+                abgelehnteReviews.add(review);
+            }
+            if(review.getRating() == 0){
+                Ablehner.ablehnen(review.toString(),"Review hat keine Bewertung");
+                abgelehnteReviews.add(review);
+            }
+            if(review.getDate() == null){
+                Ablehner.ablehnen(review.toString(),"Review hat kein Datum");
+                abgelehnteReviews.add(review);
+            }
+        }
+
+        for (Review abgelehnteReview : abgelehnteReviews){
+            reviews.remove(abgelehnteReview);
+        }
+
     }
 
 }

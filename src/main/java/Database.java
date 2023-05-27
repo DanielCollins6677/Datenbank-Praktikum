@@ -1,6 +1,4 @@
-import DataClasses.Buch;
-import DataClasses.Category;
-import DataClasses.Produkt;
+import DataClasses.*;
 
 import java.sql.*;
 import java.util.Collections;
@@ -93,6 +91,41 @@ public class Database {
 
         inDatenbank.setString(1,oberKategorie);
         inDatenbank.setString(2,unterKategorie);
+
+        ResultSet resultSet = inDatenbank.executeQuery();
+        boolean kategorieAlreadyInDatabase = false;
+        if(resultSet.next()){
+            kategorieAlreadyInDatabase = true;
+        }
+        resultSet.close();
+        inDatenbank.close();
+        return kategorieAlreadyInDatabase;
+    }
+
+    private boolean kundeAlreadyInDatabase(String kundenName) throws SQLException {
+        PreparedStatement inDatenbank = db.prepareStatement(
+                "SELECT name from Kunde where name = ?"
+        );
+
+        inDatenbank.setString(1,kundenName);
+
+        ResultSet resultSet = inDatenbank.executeQuery();
+        boolean kategorieAlreadyInDatabase = false;
+        if(resultSet.next()){
+            kategorieAlreadyInDatabase = true;
+        }
+        resultSet.close();
+        inDatenbank.close();
+        return kategorieAlreadyInDatabase;
+    }
+
+    private boolean rezensionAlreadyInDatabase(String kundenName, String prodnr) throws SQLException {
+        PreparedStatement inDatenbank = db.prepareStatement(
+                "SELECT Kname from Rezension where Kname = ? AND ProdNr = ?"
+        );
+
+        inDatenbank.setString(1,kundenName);
+        inDatenbank.setString(2,prodnr);
 
         ResultSet resultSet = inDatenbank.executeQuery();
         boolean kategorieAlreadyInDatabase = false;
@@ -231,4 +264,62 @@ public class Database {
         }
 
     }
+
+    public void addRezension(List<Review> reviews) throws SQLException {
+        try(
+            PreparedStatement addRezension = db.prepareStatement(
+            "INSERT INTO Rezension (Kname,ProdNr,Rating,Helpful,Zeitpunkt,Kommentar)" +
+                "VALUES (?,?,?,?,?,?)"
+            )
+        ){
+            db.setAutoCommit(false);
+            for(Review review : reviews){
+                String kundenName = review.getUser();
+                if(!kundeAlreadyInDatabase(kundenName)){
+                    addKunde(kundenName);
+                }
+                if(!produktAlreadyInDatabase(review.getProdID())){
+                    Ablehner.ablehnen(review.toString(),"Produkt der Review nicht in der Datenbank");
+                    continue;
+                }
+
+                if(rezensionAlreadyInDatabase(review.getUser(),review.getProdID())){
+                    continue;
+                }
+
+
+                addRezension.setString(1,kundenName);
+                addRezension.setString(2,review.getProdID());
+                addRezension.setDouble(3,review.getRating());
+                addRezension.setInt(4,review.getHelpful());
+                addRezension.setDate(5, Date.valueOf(review.getDate()));
+                addRezension.setString(6, review.getContent());
+
+                addRezension.executeUpdate();
+
+
+            }
+
+        } catch (Exception e){
+            System.err.println("Konnte Rezensionen nicht in Datenbank hinzufügen");
+            e.printStackTrace();
+        } finally {
+            db.setAutoCommit(true);
+        }
+    }
+    private void addKunde(String kundeName) throws SQLException {
+        try(
+            PreparedStatement addKunde = db.prepareStatement(
+            "INSERT INTO kunde (name)" +
+                "VALUES (?)"
+            )
+        ){
+            addKunde.setString(1,kundeName);
+            addKunde.executeUpdate();
+        } catch (Exception e){
+            System.err.println("Konnte Kunden nicht in Datenbank hinzufügen");
+            e.printStackTrace();
+        }
+    }
+
 }

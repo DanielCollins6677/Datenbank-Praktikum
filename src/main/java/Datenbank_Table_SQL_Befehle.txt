@@ -118,7 +118,9 @@ CREATE TABLE Rezension (
 	Kname varchar(30) NOT NULL,
        ProdNr varchar(30) NOT NULL,
        Rating INT NOT NULL,
-       Kommentar VARCHAR (255) NOT NULL,
+       Helpful INT NOT NULL,
+       Zeitpunkt Date NOT NULL,
+       Kommentar VARCHAR (255),
        PRIMARY KEY (Kname, ProdNr),
        FOREIGN KEY (Kname) REFERENCES Kunde,
        FOREIGN KEY (ProdNr) REFERENCES Produkt);

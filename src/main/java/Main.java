@@ -37,18 +37,7 @@ public class Main {
             //Lese die Reviews aus
             reviewList = ReviewReader.readReviews(new File(reviews));
 
-            /*for(Category category : categories){
-             *//*if(!(category.getName() == null) && category.getName().equals("TV-Produktionen unter 15 EUR")
-                    || !(category.getParentCategory() == null) && category.getParentCategory().equals("TV-Produktionen unter 15 EUR"))*//*
-                System.out.println(category);
-            }*/
-            /*System.out.printf("name: %s, straße: %s, plz: %s\n",f1.getName(),f1.getStraße(),f1.getPlz());
-            for (Produkt i: f1.getProduktPreis().keySet()){
-                System.out.println(i);
-            }*/
-            /*for (Review review : reviewList) {
-                System.out.println(review);
-            }*/
+            ReviewLogik.removeFaultyReviews(reviewList);
 
             KategorieLogik.prüfeAufKategorie(f1,categories);
             KategorieLogik.prüfeAufKategorie(f2,categories);
@@ -74,11 +63,12 @@ public class Main {
 
 
 
-        /*try {
-            db.addKategorien(categories);
+        try {
+            //db.addKategorien(categories);
+            db.addRezension(reviewList);
         } catch (Exception e) {
             throw new RuntimeException(e);
-        }*/
+        }
 
     }
 }
