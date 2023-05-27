@@ -28,35 +28,41 @@ public class Main {
         List<Review> reviewList = new ArrayList<>();
         try {
             //lese die Kategorien aus
-            //categories = CategoryReader.readCategories(new File(categoriesPath));
-
-
-            /*for(Category category : categories){
-                *//*if(!(category.getName() == null) && category.getName().equals("TV-Produktionen unter 15 EUR")
-                    || !(category.getParentCategory() == null) && category.getParentCategory().equals("TV-Produktionen unter 15 EUR"))*//*
-                System.out.println(category);
-            }*/
+            categories = XMLCategoryReader.readCategories(new File(categoriesPath));
 
             //Lese die Filialen aus
             Filiale f1 = XMLReader.readFilialeXML(shopAndItemsPath);
             Filiale f2 = XMLReader.readFilialeXML(leipzigTransformed);
 
+            //Lese die Reviews aus
+            reviewList = ReviewReader.readReviews(new File(reviews));
 
+            /*for(Category category : categories){
+             *//*if(!(category.getName() == null) && category.getName().equals("TV-Produktionen unter 15 EUR")
+                    || !(category.getParentCategory() == null) && category.getParentCategory().equals("TV-Produktionen unter 15 EUR"))*//*
+                System.out.println(category);
+            }*/
             /*System.out.printf("name: %s, straße: %s, plz: %s\n",f1.getName(),f1.getStraße(),f1.getPlz());
             for (Produkt i: f1.getProduktPreis().keySet()){
                 System.out.println(i);
             }*/
+            /*for (Review review : reviewList) {
+                System.out.println(review);
+            }*/
 
-            //Lese die Reviews aus
-            reviewList = ReviewReader.readReviews(new File(reviews));
+            KategorieLogik.prüfeAufKategorie(f1,categories);
+            KategorieLogik.prüfeAufKategorie(f2,categories);
 
             ReviewLogik.setProductRatings(f1,reviewList);
             ReviewLogik.setProductRatings(f2,reviewList);
 
-
-            /*for (Review review : reviewList) {
-                System.out.println(review);
+            /*for (String prodnr : Ablehner.abgelehnt.keySet()){
+                if(Ablehner.abgelehnt.get(prodnr).equals("Produkt hat keine zugehörige Kategorie")){
+                    System.out.println(prodnr);
+                }
             }*/
+
+
 
         } catch (Exception e) {
             e.printStackTrace();

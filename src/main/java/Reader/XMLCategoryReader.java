@@ -9,7 +9,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CategoryReader {
+public class XMLCategoryReader {
 
     public static List<Category> readCategories(File file) {
         List<Category> res = new ArrayList<>();
