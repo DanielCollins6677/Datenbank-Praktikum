@@ -84,6 +84,7 @@ public class Main {
             db.addKategorien(categories);
             db.addRezension(reviewList);
 
+            XMLReader.sortSimilars();
             db.addSimilars(XMLReader.similars);
 
             System.out.println("Alle Daten konten in Datenbank gelesen werden!");

@@ -388,9 +388,22 @@ public class XMLReader {
         return result;
     }
 
-    private static void checkFalscheProdukte(Filiale f2) {
-        System.out.printf("name: %s, straße: %s, plz: %s\n",f2.getName(),f2.getStraße(),f2.getPlz());
-        for (Produkt i: f2.getProduktPreis().keySet()){
+    private static void checkFalscheProdukte(Filiale filiale) {
+        System.out.printf("name: %s, straße: %s, plz: %s\n",filiale.getName(),filiale.getStraße(),filiale.getPlz());
+        for (Produkt i: filiale.getProduktPreis().keySet()){
+
+            for(PreisZustand j : filiale.getProduktPreis().get(i)){
+                if(j.getPreis() != -1 && j.getPreis() < 0){
+                    Ablehner.ablehnen(i.getProdNr(),"Ungültiger Preis angegeben");
+                    break;
+                }
+                if(j.getZustand() == null || j.getZustand().equals("")){
+                    Ablehner.ablehnen(i.getProdNr(),"Ungültiger Zustand angegeben");
+                    break;
+                }
+
+            }
+
             if(i.getProdNr() == null || i.getProdNr().equals("")){
                 i.setProdNr("");
                 Ablehner.ablehnen("","Keine ProduktId angegeben");
@@ -481,4 +494,26 @@ public class XMLReader {
         }
     }
 
+    public static void sortSimilars() {
+        List<String> removedSimilars = new ArrayList<>();
+
+        //Test ob symmetrische relation auch in similars falls ja lösche sie
+        //Bsp.: {(1,2), (2,1)} wird zu {(1,2)}
+        for(String prodnr1 : similars.keySet()){
+            String prodnr2 = similars.get(prodnr1);
+
+            //Teste ob es symmetrische relation in similars gibt
+            if(similars.keySet().contains(prodnr2)
+            && similars.get(prodnr2).equals(prodnr1)){
+
+                //Teste ob eine richtung bereits entfernt wird
+                if(!removedSimilars.contains(prodnr1)){
+                    removedSimilars.add(prodnr2);
+                }
+            }
+        }
+        for(String i : removedSimilars){
+            similars.remove(i);
+        }
+    }
 }
