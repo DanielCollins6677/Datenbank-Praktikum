@@ -1,0 +1,15 @@
+package com.example.repositories;
+
+import com.example.entities.Produkt;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+@Repository
+public interface ProduktRep extends JpaRepository<Produkt,String> {
+
+    List<Produkt> findAllByProdnrLike(String pattern);
+
+    List<Produkt> findByOrderByRatingDesc();
+}
