@@ -190,7 +190,7 @@ public class Logic implements Requirements {
         }
 
         for(Kategorie i : alleKategorien){
-            wurzelKategorien.add(new Category(i.getName()));
+            wurzelKategorien.add(new Category(i.getName(),1));
         }
 
         wurzel.setUnterkategorien(wurzelKategorien);
@@ -198,17 +198,18 @@ public class Logic implements Requirements {
         alleKategorien.clear();
         alleKategorieOrdnungen.clear();
 
-        Stack<Category> arbeitsStack = new Stack<>();
+        Queue<Category> queue = new PriorityQueue<>();
         for(Category i : wurzel.getUnterkategorien()) {
-            findeUnterkategorien(i, bearbeiteteKategorien,arbeitsStack, extern);
+            findeUnterkategorien(i, bearbeiteteKategorien,queue, extern);
         }
         return wurzel;
     }
 
-    private void findeUnterkategorien(Category kategorie, Map<String,Category> bearbeiteteKategorien,Stack<Category> arbeitsStack, boolean extern){
+    private void findeUnterkategorien(Category kategorie, Map<String,Category> bearbeiteteKategorien,Queue<Category> queue, boolean extern){
 
         List<KategorieOrdnung> kategorieOrdnungList = kategorieOrdnungRep.findAllByOberkategorie(kategorie.getName());
         List<Category> unterkategorien = new ArrayList<>();
+        kategorie.setUnterkategorien(unterkategorien);
         for(KategorieOrdnung i : kategorieOrdnungList){
             if(bearbeiteteKategorien.containsKey(i.getUnterkategorie())){
                 unterkategorien.add(bearbeiteteKategorien.get(i.getUnterkategorie()));
@@ -217,12 +218,12 @@ public class Logic implements Requirements {
                 // In diesem Fall fügen wir bei wiederholung EndNodes ohne Unterkategorien hinzu
                 // Falls der Tree intern verwendet wird können wir die Kategorien mit Unterkategorien wiederverwenden
 
-                Category neueUnterkategorieFullData = new Category(i.getUnterkategorie());
+                Category neueUnterkategorieFullData = new Category(i.getUnterkategorie(),kategorie.getValue() + 1);
                 unterkategorien.add(neueUnterkategorieFullData);
-                arbeitsStack.push(neueUnterkategorieFullData);
+                queue.add(neueUnterkategorieFullData);
 
                 if(extern){
-                    Category neueUnterkategorieEndNode = new Category(i.getUnterkategorie());
+                    Category neueUnterkategorieEndNode = new Category(i.getUnterkategorie(), kategorie.getValue() + 1);
                     bearbeiteteKategorien.put(i.getUnterkategorie(),neueUnterkategorieEndNode);
                 } else {
                     bearbeiteteKategorien.put(i.getUnterkategorie(),neueUnterkategorieFullData);
@@ -230,10 +231,9 @@ public class Logic implements Requirements {
             }
         }
 
-        kategorie.setUnterkategorien(unterkategorien);
 
-        if(!arbeitsStack.isEmpty()){
-            findeUnterkategorien(arbeitsStack.pop(),bearbeiteteKategorien,arbeitsStack, extern);
+        if(!queue.isEmpty()){
+            findeUnterkategorien(queue.poll(),bearbeiteteKategorien,queue, extern);
         }
     }
 
@@ -277,7 +277,10 @@ public class Logic implements Requirements {
 
         List<FilialeAngebot> produktAngebote = filialeAngebotRep.findAllByProdnr(prodnr);
         List<Double> preise = new ArrayList<>();
-        produktAngebote.stream().map((p) -> preise.add(p.getPreis()));
+        for(FilialeAngebot i : produktAngebote){
+            if(i.getPreis() == -1) continue;
+            preise.add(i.getPreis());
+        }
 
         double vergleichPreis = 0;
         for (Double i : preise){
