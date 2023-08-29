@@ -182,25 +182,30 @@ public class Logic implements Requirements {
         List<Category> wurzelKategorien = new ArrayList<>();
 
         List<Kategorie> alleKategorien = kategorieRep.findAll();
+        List<String> kategorieNamen = new ArrayList<>();
+
+        for (Kategorie i : alleKategorien) kategorieNamen.add(i.getName());
+
         List<KategorieOrdnung> alleKategorieOrdnungen = kategorieOrdnungRep.findAll();
 
         //Entfernt alle Unterkategorien
-        for(KategorieOrdnung i : alleKategorieOrdnungen){
-            alleKategorien.remove(i.getUnterkategorie());
-        }
 
-        for(Kategorie i : alleKategorien){
-            wurzelKategorien.add(new Category(i.getName(),1));
+        for(KategorieOrdnung i : alleKategorieOrdnungen) kategorieNamen.remove((i.getUnterkategorie()));
+
+
+        for(String i : kategorieNamen){
+            wurzelKategorien.add(new Category(i,1));
         }
 
         wurzel.setUnterkategorien(wurzelKategorien);
-
         alleKategorien.clear();
+        kategorieNamen.clear();
         alleKategorieOrdnungen.clear();
 
         Queue<Category> queue = new PriorityQueue<>();
         for(Category i : wurzel.getUnterkategorien()) {
             findeUnterkategorien(i, bearbeiteteKategorien,queue, extern);
+            //bearbeiteteKategorien.clear();
         }
         return wurzel;
     }
