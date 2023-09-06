@@ -128,6 +128,21 @@ CREATE TABLE Rezension (
        FOREIGN KEY (Kname) REFERENCES Kunde,
        FOREIGN KEY (ProdNr) REFERENCES Produkt);
 
+Create OR Replace Procedure aktualisiere_rating(IN prodnrP varchar(30))
+Language SQL
+AS $$
+With rating_query as(
+Select prodnr, avg(rating) as rating_neu
+from rezension
+where prodnr = prodnrP
+group by prodnr
+)
+UPDATE produkt
+set rating = rating_neu
+from rating_query
+WHERE produkt.ProdNr = prodnrP;
+$$;
+
 
 -- Create the trigger to execute on insert
 CREATE OR REPLACE FUNCTION insert_rezension_trigger()
